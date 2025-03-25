@@ -1,0 +1,32 @@
+@use 'vars';
+
+.generos {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 200px 1fr 1fr;
+    background-color: vars.$color-generos-fondo;
+
+    &__logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__logo-img {
+        width: 100px;
+    }
+
+    &__opciones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+    }
+
+    &__contenedor-boton {
+    }
+
+    &__boton {
+        
+    }
+}
