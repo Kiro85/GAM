@@ -1,14 +1,15 @@
 @use 'vars';
 
 body {
-    background-color: vars.$color-fondo;
+    background-color: vars.$background-general;
     padding: 0;
     margin: 0;
-    font-family: vars.$fuente-main;
+    font-family: vars.$font-main;
 }
 
 .home {
     display: grid;
     grid-template-columns: 200px 1fr;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
