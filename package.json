@@ -12,6 +12,7 @@
     "vite": "^6.2.0"
   },
   "dependencies": {
+    "bootstrap-icons": "^1.11.3",
     "sass": "^1.86.0"
   }
 }

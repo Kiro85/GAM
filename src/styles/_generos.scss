@@ -5,7 +5,8 @@
     width: 100%;
     display: grid;
     grid-template-rows: 200px 1fr 100px 1fr;
-    background-color: vars.$background-generos;
+    background: linear-gradient(135deg, vars.$background-generos, darken(vars.$background-nav, 10%));
+    overflow: hidden;
 
     &__logo {
         display: flex;
@@ -14,7 +15,8 @@
     }
 
     &__logo-img {
-        width: 100px;
+        width: 170px;
+        filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.2));
     }
 
     &__opciones {
@@ -32,6 +34,9 @@
 
     &__años-titulo {
         color: white;
+        font-size: 1.4em;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     &__años-contenedor {
@@ -42,8 +47,8 @@
 
     &__año {
         color: white;
-        background-color: #3b3b44;
-        border: 1px solid #3b3b44;
+        background: linear-gradient(135deg, #444, #666);
+        border: 1px solid transparent;
         margin: 5px;
         width: 80%;
         text-align: center;
@@ -53,9 +58,19 @@
         border-radius: 50px;
         font-size: 11px;
         font-family: vars.$font-main;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 4px 6px rgba(196, 194, 194, 0.3);
+
+        &:hover {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            box-shadow: 3px 9px 6px rgba(196, 194, 194, 0.3);
+
+            transform: scale(1.05);
+        }
 
         &:focus {
-            background-color: red;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            border: 1px solid white;
         }
     }
 

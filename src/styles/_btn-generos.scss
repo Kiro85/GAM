@@ -21,10 +21,7 @@
     z-index: 1;
     font-size: 11px;
     font-family: vars.$font-main;
-
-    i {
-      color: black;
-    }
+    font-weight: 600;
 
     &:before {
       content: "";
