@@ -1,0 +1,39 @@
+.main {
+    display: grid;
+    grid-template-rows: repeat(3, 50px) 1fr 50px;
+    overflow: scroll;
+
+    &__selector-contenido {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+    }
+
+    &__selector-categorias {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+    }
+
+    &__buscador {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+    }
+
+    &__contenido {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 2px;
+    }
+
+    &__paginas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+    }
+}
