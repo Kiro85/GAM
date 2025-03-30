@@ -1,8 +1,8 @@
 .main {
     display: grid;
-    grid-template-rows: repeat(3, 50px) 1fr 50px;
+    grid-template-rows: repeat(2, 50px) 90px 1fr 70px;
     overflow: scroll;
-
+    padding-bottom: 40px;
     &__selector-contenido {
         display: flex;
         justify-content: center;
@@ -19,20 +19,22 @@
 
     &__buscador {
         display: flex;
+        position: relative;
         justify-content: center;
         align-items: center;
         gap: 2px;
     }
 
-    &__contenido {
+    &__content {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 2px;
     }
 
     &__paginas {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
+        margin: 0 40px;
         align-items: center;
         gap: 2px;
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <script type="module" src="./src/js/index.js" defer></script>
 
 </head>
+
 <body>
   <header>
     <nav class="nav">
@@ -19,29 +21,21 @@
         <li class="nav__item"><a class="nav__link" href=""><i class="bi bi-people-fill nav__icon"></i>Foros</a></li>
       </ul>
       <section class="nav__perfil">
-        <i class="bi bi-person-circle nav__icon-perfil"></i>
+        <a href="./pages/user.html"><i class="bi bi-person-circle nav__icon-perfil"></i></a>
       </section>
     </nav>
   </header>
 
   <main class="home">
+    <!-- ASIDE GENEROS -->
     <aside class="generos">
       <section class="generos__logo">
-        <img class="generos__logo-img" src="https://darksouls3.wiki.fextralife.com/file/Dark-Souls-3/Soul_of_a_Crestfallen_Knight_Icon.png" alt="">
+        <img class="generos__logo-img"
+          src="https://darksouls3.wiki.fextralife.com/file/Dark-Souls-3/Soul_of_a_Crestfallen_Knight_Icon.png" alt="">
       </section>
 
-      <section class="generos__opciones">
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
-        <button class="btn-generos">Aventura</button>
+      <section class="generos__opciones" id="generos">
+        <!-- <button class="btn-generos">Aventura</button> -->
       </section>
 
       <section class="generos__años">
@@ -58,31 +52,60 @@
       </section>
     </aside>
 
+    <!-- MAIN -->
     <section class="main">
       <section class="main__selector-contenido">
-        <button class="selector">Catalogo</button>
-        <button class="selector">Tops</button>
+        <button class="selector"><span class="selector__texto">Catalogo</span></button>
+        <button class="selector"><span class="selector__texto">Tops</span></button>
       </section>
-
       <section class="main__selector-categorias">
-        <button class="selector">Juegos</button>
-        <button class="selector">Anime</button>
-        <button class="selector">Manga</button>
+        <button class="selector"><span class="selector__texto">Juegos</span></button>
+        <button class="selector"><span class="selector__texto">Animes</span></button>
+        <button class="selector"><span class="selector__texto">Magas</span></button>
       </section>
 
       <section class="main__buscador">
-        <i class="bi bi-search"></i>
-        <input type="search" placeholder="Buscar...">
+        <section class="buscador">
+          <i class="buscador__icon bi bi-search"></i>
+          <input class="buscador__input" type="search" placeholder="Buscar...">
+        </section>
       </section>
 
-      <section class="main__contenido" id="anime"></section>
+      <section class="main__content" id="content">
+        <!-- <article class="card">
+          <section class="card__content">
+            <section class="card__back">
+              <section class="card__back-content">
+                <img class="card__back-img" src="https://m.media-amazon.com/images/I/81yFr0PmpZL.jpg" alt="">
+              </section>
+            </section>
+        
+            <section class="card__front">
+              <section class="card__front-container-img">
+                <img class="card__front-img" src="https://m.media-amazon.com/images/I/81yFr0PmpZL.jpg" alt="">
+              </section>
+        
+              <section class="card__front-content">
+                <small class="card__badge">Re:zero</small>
+                <section class="card__description">
+                  <header class="card__title">
+                    <h3 class="card__title-text"><strong>Cosas</strong></h3>
+                  </header>
+                  <footer class="card__footer"><p>30 Mins &nbsp; | &nbsp; 1 Serving</p></footer>
+                </section>
+              </section>
+            </section>
+          </section>
+        </article> -->
+      </section>
 
       <section class="main__paginas">
-        <button id="prev">Anterior</button>
-        <button id="next">Siguiente</button>
+        <button class="btn" id="prev">Anterior</button>
+        <button class="btn" id="next">Siguiente</button>
       </section>
     </section>
   </main>
 
 </body>
+
 </html>

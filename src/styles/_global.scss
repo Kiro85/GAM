@@ -5,11 +5,11 @@ body {
     padding: 0;
     margin: 0;
     font-family: vars.$font-main;
+    overflow: hidden;
 }
 
 .home {
     display: grid;
     grid-template-columns: 200px 1fr;
     height: 100vh;
-    // overflow: hidden;
 }
