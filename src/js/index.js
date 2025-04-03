@@ -1,1 +1,1 @@
-import './fetchAnime.js';
+import { fetchAnime, fetchAnimeGenres } from './fetchAnime.js';

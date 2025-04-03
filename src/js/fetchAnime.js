@@ -3,8 +3,44 @@ const content = document.getElementById("content");
 const generos = document.getElementById("generos");
 const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
+const modal = document.getElementById("animeModal");
+const modalClose = modal.querySelector(".modal__close");
 
-function fetchAnime(page) {
+// Función para mostrar el modal con la información del anime
+function showAnimeModal(anime) {
+    const modalImage = modal.querySelector(".modal__image");
+    const modalTitle = modal.querySelector(".modal__title");
+    const modalDetails = modal.querySelector(".modal__details");
+    const modalSynopsis = modal.querySelector(".modal__synopsis");
+
+    modalImage.src = anime.images.webp.large_image_url;
+    modalTitle.textContent = anime.title;
+    modalDetails.innerHTML = `
+        <div><strong>Rank:</strong> #${anime.rank}</div>
+        <div><strong>Episodios:</strong> ${anime.episodes || "N/A"}</div>
+        <div><strong>Estado:</strong> ${anime.status}</div>
+        <div><strong>Género:</strong> ${anime.genres[0]?.name || "N/A"}</div>
+        <div><strong>Puntuación:</strong> ${anime.score || "N/A"}</div>
+        <div><strong>Estudios:</strong> ${anime.studios[0]?.name || "N/A"}</div>
+    `;
+    modalSynopsis.textContent = anime.synopsis || "Sin sinopsis disponible.";
+
+    modal.style.display = "block";
+}
+
+// Cerrar el modal
+modalClose.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+// Cerrar el modal al hacer clic fuera
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+export function fetchAnime(page) {
     fetch(`https://api.jikan.moe/v4/top/anime?page=${page}`)
         .then(res => res.json())
         .then(response => {
@@ -48,6 +84,9 @@ function fetchAnime(page) {
                 article.classList.add("card");
                 article.innerHTML = plantilla;
 
+                // Agregar evento de clic para mostrar el modal
+                article.addEventListener("click", () => showAnimeModal(e));
+
                 content.appendChild(article);
             });
         })
@@ -72,7 +111,7 @@ prevButton.addEventListener("click", () => {
 fetchAnime(currentPage);
 
 
-function fetchAnimeGenres() {
+export function fetchAnimeGenres() {
     fetch(`https://api.jikan.moe/v4/genres/anime?filter=genres`)
         .then(res => res.json())
         .then(response => {
@@ -82,7 +121,7 @@ function fetchAnimeGenres() {
                 let btn = document.createElement("button");
                 btn.classList.add("btn-generos");
                 btn.innerText = e.name
-                
+
                 generos.appendChild(btn);
             });
         })

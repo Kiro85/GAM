@@ -1,8 +1,25 @@
 .main {
     display: grid;
     grid-template-rows: repeat(2, 50px) 90px 1fr 70px;
-    overflow: scroll;
     padding-bottom: 40px;
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: red;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
     &__selector-contenido {
         display: flex;
         justify-content: center;
@@ -30,6 +47,8 @@
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 2px;
         margin-left: 10px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     &__paginas {
@@ -38,5 +57,9 @@
         margin: 0 40px;
         align-items: center;
         gap: 2px;
+    }
+
+    &--user {
+        margin-top: 55px;
     }
 }

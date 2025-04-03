@@ -3,7 +3,7 @@
     height: 40vh;
     display: flex;
     position: relative;
-    box-shadow: 1px  5px 15px 5px;
+    box-shadow: 1px 5px 15px 5px;
 
     &__banner {
         width: 100%;
@@ -28,7 +28,7 @@
         margin-bottom: -100px;
         border-radius: 50%;
         border: 5px solid white;
-        box-shadow: 1px  5px 15px 5px;
+        box-shadow: 1px 5px 15px 5px;
     }
 
     &__logo-img {
@@ -71,7 +71,6 @@
     &__opcion {
         display: flex;
         padding: 15px;
-        margin: 0 0 -15px -15px;
         height: 10px;
         justify-content: space-between;
         background-color: rgba(0, 0, 0, 0.5);

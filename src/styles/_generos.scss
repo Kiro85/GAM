@@ -7,6 +7,7 @@
     grid-template-rows: 200px 2fr 100px 1fr;
     background: linear-gradient(135deg, vars.$background-generos, darken(vars.$background-nav, 10%));
     overflow: hidden;
+    box-sizing: border-box;
 
     &__logo {
         display: flex;
@@ -25,6 +26,8 @@
         justify-content: center;
         overflow-y: scroll;
         overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
 
         &::-webkit-scrollbar {
             width: 3px;
@@ -97,5 +100,9 @@
         display: flex;
         justify-content: center;
         align-items: start;
+    }
+
+    &--user {
+        grid-template-rows: 150px 5fr 100px 1fr;
     }
 }
