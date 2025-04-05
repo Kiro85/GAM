@@ -25,4 +25,11 @@ body {
     display: grid;
     grid-template-columns: 200px 1fr;
     height: 100vh;
+
+    &--friends {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin: 55px 0;
+    }
 }

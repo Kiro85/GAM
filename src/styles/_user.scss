@@ -1,105 +1,180 @@
+@use 'vars';
+
 .perfil {
-    width: 100vw;
-    height: 40vh;
-    display: flex;
     position: relative;
-    box-shadow: 1px 5px 15px 5px;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(vars.$main-color, 0.4);
 
     &__banner {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center;
+        filter: brightness(0.6);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            transform: scale(1.05);
+            filter: brightness(0.7);
+        }
     }
 
     &__info {
-        display: grid;
-        grid-template-columns: 250px 150px 1fr;
-        gap: 20px;
-        align-items: flex-end;
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px 40px;
+        display: flex;
+        align-items: flex-end;
+        gap: 30px;
+        background: linear-gradient(to top, rgba(vars.$main-color, 0.95), transparent);
     }
 
     &__logo {
-        width: 250px;
-        height: 250px;
-        margin-bottom: -100px;
+        width: 150px;
+        height: 150px;
         border-radius: 50%;
-        border: 5px solid white;
-        box-shadow: 1px 5px 15px 5px;
-    }
+        overflow: hidden;
+        border: 3px solid vars.$text-color;
+        box-shadow: 0 0 30px rgba(vars.$second-color, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
 
-    &__logo-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        border-radius: 50%;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(vars.$second-color, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+        }
+
+        &:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: vars.$second-color;
+            box-shadow: 0 0 40px rgba(vars.$second-color, 0.4);
+
+            &::before {
+                transform: translateX(100%);
+            }
+        }
+
+        &-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
     }
 
     &__nombre {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 40%;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 5px;
-    }
+        flex: 1;
+        margin-bottom: 20px;
 
-    &__nombre-texto {
-        font-size: 2em;
-        color: white;
-        text-align: center;
-    }
+        &-texto {
+            color: vars.$text-color;
+            font-size: 36px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(vars.$main-color, 0.5);
+            position: relative;
+            display: inline-block;
 
-    &__opciones {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, vars.$second-color, vars.$second-color-2);
+                transform: scaleX(0);
+                transform-origin: right;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            &:hover::after {
+                transform: scaleX(1);
+                transform-origin: left;
+            }
+        }
     }
 
     &__opciones-lista {
         display: flex;
-        justify-content: center;
-        align-items: center;
         gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     &__opcion {
-        display: flex;
-        padding: 15px;
-        height: 10px;
-        justify-content: space-between;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        list-style: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-            transform: scale(1.05);
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, vars.$second-color, vars.$second-color-2);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        &:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
         }
     }
 
     &__opcion-link {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        color: vars.$text-color;
         text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        background: rgba(vars.$main-color, 0.5);
+        backdrop-filter: blur(5px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(vars.$text-color, 0.1);
+
+        &:hover {
+            background: rgba(vars.$second-color, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(vars.$second-color, 0.2);
+            border-color: rgba(vars.$second-color, 0.3);
+        }
     }
 
     &__opcion-icono {
-        color: white;
-        font-size: 1.5em;
+        font-size: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        .perfil__opciones-link:hover & {
+            transform: scale(1.1) rotate(5deg);
+            color: vars.$second-color;
+        }
+
     }
 
     &__opcion-texto {
-        display: inline-block;
-        color: white;
-        font-size: 1.2em;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
     }
 }
