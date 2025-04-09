@@ -26,6 +26,7 @@ public class Test extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.getWriter().append(Bbdd.descarregar());
+		response.getWriter().append("hola");
 	}
 
 	/**
