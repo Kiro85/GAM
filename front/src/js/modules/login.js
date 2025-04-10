@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
 
-    // Verificar si hay error en la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('error') === 'true') {
-        alert('Usuario o contraseña incorrectos');
-    }
+    // // Verificar si hay error en la URL
+    // const urlParams = new URLSearchParams(window.location.search);
+    // if (urlParams.get('error') === 'true') {
+    //     alert('Usuario o contraseña incorrectos');
+    // }
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Servlet implementation class Auth
@@ -37,7 +38,7 @@ public class Auth extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		// llamamos al metodo para buscar usuario
-		boolean found = Main.auth();
+		boolean found = auth(null);
 			
 		// si el usuario existe, creamos una sesion
 		if (found) {
@@ -47,6 +48,15 @@ public class Auth extends HttpServlet {
 		} else {
 			response.sendRedirect("login.html?error=true");
 		}
+	}
+
+	// Methods
+	public boolean auth(ArrayList<User> users) {
+		boolean found = false;
+
+		
+		
+		return found;
 	}
 
 }
