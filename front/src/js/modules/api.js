@@ -24,62 +24,54 @@ function showLoading() {
     `;
 }
 
-// Funciones principales
-export function fetchAnime(page) {
-    console.log('Fetching anime page:', page);
-    showLoading();
+// URL base de la API
+const API_URL = 'https://api.jikan.moe/v4';
 
-    fetch(`https://api.jikan.moe/v4/top/anime?page=${page}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log('Received anime data:', data);
-            if (!data.data || !Array.isArray(data.data)) {
-                throw new Error('Datos inválidos');
-            }
+// Función para obtener animes
+export async function fetchAnime(page = 1, genre = '', search = '') {
+    try {
+        let url = `${API_URL}/top/anime?page=${page}`;
 
-            content.innerHTML = "";
-            data.data.forEach(anime => {
-                const card = createAnimeCard(anime);
-                content.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching anime:', error);
-            showError('Error al cargar los datos');
-        });
+        if (genre) {
+            url = `${API_URL}/anime?page=${page}&genres=${genre}`;
+        }
+
+        if (search) {
+            url = `${API_URL}/anime?page=${page}&q=${encodeURIComponent(search)}`;
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Si no estamos filtrando por género o búsqueda, ordenar por ranking
+        if (!genre && !search) {
+            data.data.sort((a, b) => a.rank - b.rank);
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error al obtener animes:', error);
+        throw error;
+    }
 }
 
-export function fetchAnimeGenres() {
-    console.log('Fetching genres');
-    generos.innerHTML = `
-        <div class="loading-state">
-            <i class="bi bi-arrow-repeat"></i>
-            <p>Cargando géneros...</p>
-        </div>
-    `;
+// Función para obtener géneros
+export async function fetchAnimeGenres() {
+    try {
+        const response = await fetch(`${API_URL}/genres/anime?filter=genres`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    fetch(`https://api.jikan.moe/v4/genres/anime?filter=genres`)
-        .then(res => res.json())
-        .then(data => {
-            console.log('Received genres data:', data);
-            if (!data.data || !Array.isArray(data.data)) {
-                throw new Error('Datos inválidos');
-            }
-
-            generos.innerHTML = "";
-            data.data.forEach(genre => {
-                const btn = document.createElement("button");
-                btn.classList.add("btn-generos");
-                btn.innerText = genre.name;
-                generos.appendChild(btn);
-            });
-
-            if (data.data.length === 0) {
-                showError('No se encontraron géneros', generos);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching genres:', error);
-            showError('Error al cargar los géneros', generos);
-        });
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error al obtener géneros:', error);
+        throw error;
+    }
 } 

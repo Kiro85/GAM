@@ -2,7 +2,7 @@
 
 .nav {
     width: 100%;
-    background: linear-gradient(135deg, vars.$background-generos, darken(vars.$background-nav, 10%));
+    background: linear-gradient(135deg, vars.$background-genres, darken(vars.$background-nav, 10%));
     padding: 10px 40px;
     display: flex;
     justify-content: space-between;
@@ -88,7 +88,7 @@
         }
     }
 
-    &__perfil {
+    &__profile {
         position: relative;
 
         &-link {
@@ -154,18 +154,58 @@
         }
     }
 
-    &__icon-perfil {
+    &__icon-profile {
         font-size: 28px;
         color: vars.$text-color;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         z-index: 1;
 
-        .nav__perfil-link:hover & {
+        .nav__profile-link:hover & {
             transform: scale(1.1) rotate(10deg);
             color: vars.$second-color;
             text-shadow: 0 0 15px rgba(vars.$second-color, 0.5);
-            animation: pulse 1.5s infinite;
+        }
+    }
+
+    &__logout {
+        margin-left: auto;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    &__logout-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, vars.$second-color, vars.$second-color-2);
+        color: vars.$text-color;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        
+        i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            
+            i {
+                transform: translateX(2px);
+            }
+        }
+        
+        &:active {
+            transform: translateY(0);
         }
     }
 

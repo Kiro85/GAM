@@ -1,6 +1,6 @@
 @use 'vars';
 
-.perfil {
+.profile {
     position: relative;
     width: 100%;
     height: 400px;
@@ -77,11 +77,11 @@
         }
     }
 
-    &__nombre {
+    &__name {
         flex: 1;
         margin-bottom: 20px;
 
-        &-texto {
+        &-text {
             color: vars.$text-color;
             font-size: 36px;
             margin: 0;
@@ -109,7 +109,7 @@
         }
     }
 
-    &__opciones-lista {
+    &__options-list {
         display: flex;
         gap: 20px;
         list-style: none;
@@ -117,7 +117,7 @@
         margin: 0;
     }
 
-    &__opcion {
+    &__option {
         position: relative;
         overflow: hidden;
 
@@ -140,7 +140,7 @@
         }
     }
 
-    &__opcion-link {
+    &__option-link {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -161,18 +161,18 @@
         }
     }
 
-    &__opcion-icono {
+    &__option-icon {
         font-size: 20px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-        .perfil__opciones-link:hover & {
+        .profile__option-link:hover & {
             transform: scale(1.1) rotate(5deg);
             color: vars.$second-color;
         }
 
     }
 
-    &__opcion-texto {
+    &__option-text {
         margin: 0;
         font-size: 16px;
         font-weight: 500;

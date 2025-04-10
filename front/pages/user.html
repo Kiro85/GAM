@@ -20,25 +20,25 @@
                 <li class="nav__item"><a class="nav__link" href=""><i class="bi bi-chat-fill nav__icon"></i>Mensajes</a></li>
                 <li class="nav__item"><a class="nav__link" href=""><i class="bi bi-people-fill nav__icon"></i>Foros</a></li>
             </ul>
-            <section class="nav__perfil">
-                <a class="nav__perfil-link" href="./user.html"><i class="bi bi-person-circle nav__icon-perfil"></i></a>
-              </section>
+            <section class="nav__profile">
+                <a class="nav__profile-link" href="./user.html"><i class="bi bi-person-circle nav__icon-profile"></i></a>
+            </section>
         </nav>
 
         <!-- Perfil -->
-        <article class="perfil">
-            <img class="perfil__banner" src="https://cms.rhinoshield.app/public/images/ip_page_frieren_banner_mobile_cd2937b1b4.jpg" alt="">
-            <section class="perfil__info">
-                <section class="perfil__logo">
-                    <img class="perfil__logo-img" src="https://a.storyblok.com/f/178900/960x540/0b09f64297/cr_frieren_key.png" alt="">
+        <article class="profile">
+            <img class="profile__banner" src="https://cms.rhinoshield.app/public/images/ip_page_frieren_banner_mobile_cd2937b1b4.jpg" alt="">
+            <section class="profile__info">
+                <section class="profile__logo">
+                    <img class="profile__logo-img" src="https://a.storyblok.com/f/178900/960x540/0b09f64297/cr_frieren_key.png" alt="">
                 </section>
-                <section class="perfil__nombre">
-                    <h1 class="perfil__nombre-texto">Frieren</h1>
+                <section class="profile__name">
+                    <h1 class="profile__name-text">Frieren</h1>
                 </section>
-                <section class="perfil__opciones">
-                    <ul class="perfil__opciones-lista">
-                        <li class="perfil__opcion"><a href="" class="perfil__opcion-link"><i class="bi bi-person-fill perfil__opcion-icono"></i> <p class="perfil__opcion-texto">Amigos</p> </a></li>
-                        <li class="perfil__opcion"><a href="" class="perfil__opcion-link"><i class="bi bi-chat-fill perfil__opcion-icono"></i> <p class="perfil__opcion-texto">Mensajes</p> </a></li>
+                <section class="profile__options">
+                    <ul class="profile__options-list">
+                        <li class="profile__option"><a href="" class="profile__option-link"><i class="bi bi-person-fill profile__option-icon"></i> <p class="profile__option-text">Amigos</p> </a></li>
+                        <li class="profile__option"><a href="" class="profile__option-link"><i class="bi bi-chat-fill profile__option-icon"></i> <p class="profile__option-text">Mensajes</p> </a></li>
                     </ul>
                 </section>
             </section>
@@ -47,48 +47,48 @@
 
     <main class="home">
         <!-- ASIDE GENEROS -->
-        <aside class="generos generos--user">
-            <section class="generos__logo"></section>
+        <aside class="genres genres--user">
+            <section class="genres__logo"></section>
 
-            <section class="generos__opciones" id="generos"></section>
+            <section class="genres__opciones" id="genres"></section>
 
-            <section class="generos__años">
-                <span class="generos__años-titulo">AÑOS</span>
-                <div class="generos__años-contenedor">
-                    <input class="generos__año" type="number" placeholder="1950" maxlength="4" min="1950">
-                    <span class="generos__año-separador">-</span>
-                    <input class="generos__año" type="number" placeholder="2025" maxlength="4" min="2025">
+            <section class="genres__años">
+                <span class="genres__años-titulo">AÑOS</span>
+                <div class="genres__años-contenedor">
+                    <input class="genres__año" type="number" placeholder="1950" maxlength="4" min="1950">
+                    <span class="genres__año-separador">-</span>
+                    <input class="genres__año" type="number" placeholder="2025" maxlength="4" min="2025">
                 </div>
             </section>
 
-            <section class="generos__contenedor-boton">
-                <button class="btn-generos btn-generos--buscar">Buscar</button>
+            <section class="genres__contenedor-boton">
+                <button class="btn-genres btn-genres--buscar">Buscar</button>
             </section>
         </aside>
 
         <!-- MAIN -->
         <section class="main main--user">
-            <section class="main__selector-contenido">
-                <button class="selector"><span class="selector__texto">Catalogo</span></button>
-                <button class="selector"><span class="selector__texto">Tops</span></button>
+            <section class="main__content-selector">
+                <button class="selector"><span class="selector__text">Catalogo</span></button>
+                <button class="selector"><span class="selector__text">Tops</span></button>
             </section>
-            <section class="main__selector-categorias">
-                <button class="selector"><span class="selector__texto">Juegos</span></button>
-                <button class="selector"><span class="selector__texto">Animes</span></button>
-                <button class="selector"><span class="selector__texto">Magas</span></button>
+            <section class="main__categories-selector">
+                <button class="selector"><span class="selector__text">Juegos</span></button>
+                <button class="selector"><span class="selector__text">Animes</span></button>
+                <button class="selector"><span class="selector__text">Magas</span></button>
             </section>
 
-            <section class="main__buscador">
-                <section class="buscador">
-                    <i class="buscador__icon bi bi-search"></i>
-                    <input class="buscador__input" type="search" placeholder="Buscar...">
+            <section class="main__search">
+                <section class="search">
+                    <i class="search__icon bi bi-search"></i>
+                    <input class="search__input" type="search" placeholder="Buscar...">
                 </section>
             </section>
 
             <section class="main__content" id="content"></section>
 
             <!-- paginación -->
-            <section class="main__paginas">
+            <section class="main__pages">
                 <button class="btn" id="prev">Anterior</button>
                 <button class="btn" id="next">Siguiente</button>
             </section>

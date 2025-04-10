@@ -20,21 +20,21 @@
         background-color: transparent;
     }
 
-    &__selector-contenido {
+    &__content-selector {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 2px;
     }
 
-    &__selector-categorias {
+    &__categories-selector {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 2px;
     }
 
-    &__buscador {
+    &__search {
         display: flex;
         position: relative;
         justify-content: center;
@@ -49,7 +49,7 @@
         box-sizing: border-box;
     }
 
-    &__paginas {
+     &__pages{
         display: flex;
         justify-content: space-between;
         margin: 0 40px;
