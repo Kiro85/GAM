@@ -28,16 +28,6 @@ public class Auth extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// HttpSession session = request.getSession();
-
-		// if (session.getAttribute("username") != null) {
-		// response.getWriter().append("logged");
-		// } else {
-		// response.getWriter().append("!logged");
-		// }
-		HttpSession session = request.getSession(false);
-
-		response.getWriter().append(session.getId());
 	}
 
 	/**
@@ -74,9 +64,6 @@ public class Auth extends HttpServlet {
 		// si el usuario existe, creamos una sesion
 		try {
 			if (found) {
-				HttpSession session = request.getSession();
-				session.setAttribute("username", username);
-				System.out.println("Sesión creada - ID: " + session.getId());
 				response.getWriter().append("found");
 			} else {
 				response.getWriter().append("!found");

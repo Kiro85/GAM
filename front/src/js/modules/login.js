@@ -8,6 +8,7 @@ export function login() {
         ehttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 if (this.responseText == "found") {
+                    document.cookie = "loggedIn=true; path=/;";
                     window.location.href = "http://localhost:5173/index.html";
                 } else {
                     alert("Usuario o contraseña incorrectos");
