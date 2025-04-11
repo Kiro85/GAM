@@ -24,6 +24,13 @@ public class User {
 
         this.setCounter();
     }
+    
+    public User(int id, String userName, String password) {
+        this.setId(id);
+        this.setUserName(userName);
+        this.setPassword(password);
+    }
+
 
     // Methods
     public void createUser(String userName, String password, ArrayList<User> users) {
@@ -40,46 +47,15 @@ public class User {
     }
 
     private void addUserToDB(User user) {
-        // Load driver
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException error) {
-            System.out.println("Error al cargar el driver JDBC de MySQL: " + error.getMessage());
-        }
-
-        // Connect to DataBase
-        Connection conBD = null;
-        try {
-            conBD = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/gam", "root", "");
-        } catch (SQLException error) {
-            System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + error.getMessage());
-        }
-
-        // Create Statement
-        Statement mStm = null;
-        try {
-            mStm = (Statement) ((java.sql.Connection) conBD).createStatement();
-        } catch (SQLException error) {
-            System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + error.getMessage());
-        }
-
-        // Execute Query
-        try {
-            String query = "INSERT INTO users (id, username, password) VALUES ('" + user.getId() + "' '"
-                    + user.getUserName() + "' '" + user.getPassword() + "')";
-            System.out.println(query);
-            ((java.sql.Statement) mStm).executeUpdate(query);
-        } catch (SQLException error) {
-            System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + error.getMessage());
-        }
-
-        // Close Connection
-        try {
-            ((Connection) mStm).close();
-            conBD.close();
-        } catch (IOException error) {
-            System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + error.getMessage());
-        }
+        
+    }
+    
+    public static void updateCounter() {
+    	try {
+    		User.counter = Main.getUsers().size() - 1;    		
+    	} catch (Exception e) {
+    		System.out.println("Error al actualizar el id de los usuarios: " + e.getMessage());
+    	}
     }
 
     // Getters & Setters

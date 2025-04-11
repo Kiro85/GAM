@@ -2,18 +2,29 @@ import { preloadImage, optimizeImageUrl } from './imageLoader.js';
 
 // Elementos del DOM
 const modal = document.getElementById("animeModal");
-const modalClose = modal.querySelector(".modal__close");
+const modalClose = modal ? modal.querySelector(".modal__close") : null;
+
+// Función para cerrar el modal
+function closeModal() {
+    if (!modal) return;
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+}
 
 // Función para mostrar el modal con la información del anime
 export async function showAnimeModal(anime) {
+    if (!modal) return;
+
     const modalImage = modal.querySelector(".modal__image");
     const modalTitle = modal.querySelector(".modal__title");
     const modalDetails = modal.querySelector(".modal__details");
     const modalSynopsis = modal.querySelector(".modal__synopsis");
 
+    if (!modalImage || !modalTitle || !modalDetails || !modalSynopsis) return;
+
     // Mostrar el modal inmediatamente
     modal.style.display = "block";
-    document.body.style.overflow = "hidden"; // Prevenir scroll del body
+    document.body.style.overflow = "hidden";
 
     // Actualizar contenido que no depende de la imagen
     modalTitle.textContent = anime.title;
@@ -38,25 +49,21 @@ export async function showAnimeModal(anime) {
     }
 }
 
-// Función para cerrar el modal
-function closeModal() {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto"; // Restaurar scroll del body
+// Inicializar event listeners si el modal existe
+if (modal && modalClose) {
+    modalClose.addEventListener("click", closeModal);
+
+    // Cerrar el modal al hacer clic fuera
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Cerrar el modal con la tecla ESC
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.style.display === "block") {
+            closeModal();
+        }
+    });
 }
-
-// Event Listeners para cerrar el modal
-modalClose.addEventListener("click", closeModal);
-
-// Cerrar el modal al hacer clic fuera
-window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
-
-// Cerrar el modal con la tecla ESC
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.style.display === "block") {
-        closeModal();
-    }
-}); 

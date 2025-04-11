@@ -1,31 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
+export function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    // // Verificar si hay error en la URL
-    // const urlParams = new URLSearchParams(window.location.search);
-    // if (urlParams.get('error') === 'true') {
-    //     alert('Usuario o contraseña incorrectos');
-    // }
+    try {
+        var ehttp = new XMLHttpRequest();
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                
-                var ehttp = new XMLHttpRequest();
-            
-                ehttp.open("POST", "http://localhost:8080/GAM/Auth", true);
-                ehttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                ehttp.send("username="+username+"password="+password);
-
-            } catch (error) {
-                console.error('Error al iniciar sesión:', error);
-                alert('Error al conectar con el servidor');
+        ehttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "found") {
+                    window.location.href = "http://localhost:5173/index.html";
+                } else {
+                    alert("Usuario o contraseña incorrectos");
+                }
             }
-        });
+        };
+
+        ehttp.open("POST", "http://localhost:8080/GAM/Auth", true);
+        ehttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        ehttp.send("username=" + username + "&password=" + password);
+
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        alert('Error al conectar con el servidor');
     }
-}); 
+}
