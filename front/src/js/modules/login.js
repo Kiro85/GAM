@@ -21,6 +21,5 @@ export function login() {
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        alert('Error al conectar con el servidor');
     }
 }

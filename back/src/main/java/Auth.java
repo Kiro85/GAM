@@ -26,28 +26,33 @@ public class Auth extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		
-		if (session.getAttribute("username") != null) {
-			response.getWriter().append("logged");
-		} else {
-			response.getWriter().append("!logged");
-		}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// HttpSession session = request.getSession();
+
+		// if (session.getAttribute("username") != null) {
+		// response.getWriter().append("logged");
+		// } else {
+		// response.getWriter().append("!logged");
+		// }
+		HttpSession session = request.getSession(false);
+
+		response.getWriter().append(session.getId());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// actualizamos la lista de usuarios
 		try {
 			Main.updateUsers();
 		} catch (Exception e) {
 			System.out.println("Error al actualizar la lista de usuarios: " + e.getMessage());
 		}
-		
+
 		// Obtenemos credenciales
 		String username = null;
 		String password = null;
@@ -58,10 +63,10 @@ public class Auth extends HttpServlet {
 			System.out.println("Error al obtener credenciales: " + e.getMessage());
 		}
 
-		// llamamos al metodo para buscar usuario 
+		// llamamos al metodo para buscar usuario
 		boolean found = false;
 		try {
-			found = auth(Main.getUsers(), username);
+			found = auth(Main.getUsers(), username, password);
 		} catch (Exception e) {
 			System.out.println("Error al autenticar usuario: " + e.getMessage());
 		}
@@ -71,6 +76,7 @@ public class Auth extends HttpServlet {
 			if (found) {
 				HttpSession session = request.getSession();
 				session.setAttribute("username", username);
+				System.out.println("Sesión creada - ID: " + session.getId());
 				response.getWriter().append("found");
 			} else {
 				response.getWriter().append("!found");
@@ -78,8 +84,8 @@ public class Auth extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println("Error al enviar respuesta: " + e.getMessage());
 		}
-		
-		// 	Testing
+
+		// Testing
 		//
 		Main.showUsers();
 		//
@@ -87,24 +93,23 @@ public class Auth extends HttpServlet {
 	}
 
 	// Methods
-	public boolean auth(ArrayList<User> users, String username) {
+	public boolean auth(ArrayList<User> users, String username, String password) {
 		boolean found = false;
 
 		// buscamos el usuario en la lista
 		try {
 			int i = 0;
 			do {
-				if(users.get(i).getUserName().equals(username)) {
+				if (users.get(i).getUserName().equals(username) && users.get(i).getPassword().equals(password)) {
 					found = true;
 				} else {
 					i++;
 				}
-				
-			} while(!found && i < users.size());
+			} while (!found && i < users.size());
 		} catch (Exception e) {
 			System.out.println("Error al buscar el usuario: " + e.getMessage());
 		}
-		
+
 		return found;
 	}
 
