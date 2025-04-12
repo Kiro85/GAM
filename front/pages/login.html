@@ -12,7 +12,7 @@
 
 <body class="body-login">
 
-    <main class="login">
+    <main class="login" id="login">
         <div class="login__decorative login__decorative--top"></div>
         <div class="login__decorative login__decorative--bottom"></div>
         <div class="login__decorative login__decorative--left"></div>
@@ -25,6 +25,12 @@
                     <span class="login__title-decoration"></span>
                 </section>
                 <p class="login__subtitle">Login to continue</p>
+                <section class="login__button-group">
+                    <button type="button" id="login-btn"
+                        class="login__button login__button--login login__button--login--active">Login</button>
+                    <button type="button" id="register-btn"
+                        class="login__button login__button--register">Register</button>
+                </section>
             </header>
 
             <form class="login__form" id="loginForm">
@@ -54,9 +60,13 @@
                     </section>
                 </section>
 
-                <button type="submit" class="login__button">
+                <button type="submit" class="login__button login__button--active" id="login-send" data-action="login">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <p>Login</p>
+                </button>
+                <button type="submit" class="login__button" id="register-send" data-action="register">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <p>Register</p>
                 </button>
             </form>
         </article>

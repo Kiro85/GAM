@@ -262,6 +262,7 @@
     }
 
     &__button {
+        display: none;
         margin-top: 1rem;
         padding: 0.75rem 1.5rem;
         background: linear-gradient(135deg, vars.$second-color, vars.$second-color-2);
@@ -272,12 +273,15 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         position: relative;
         overflow: hidden;
+
+        &--active {
+            display: flex;
+        }
 
         i {
             font-size: 1.2rem;
@@ -300,6 +304,28 @@
 
         &:active {
             transform: translateY(0);
+        }
+
+        &-group {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        &--login, &--register {
+            display: flex;
+            width: 50%;
+            background: lighten(vars.$second-color, 20%);
+
+            &--active {
+                background: vars.$second-color;
+            }
+
+            &:hover {
+                background: lighten(vars.$second-color, 10%);
+            }
         }
     }
 }
