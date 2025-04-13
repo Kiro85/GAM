@@ -1,3 +1,5 @@
+
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,16 +10,16 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Servlet implementation class Auth
+ * Servlet implementation class Login
  */
-@WebServlet("/Auth")
-public class Auth extends HttpServlet {
+@WebServlet("/Login")
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public Auth() {
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Login() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -98,5 +100,5 @@ public class Auth extends HttpServlet {
 
 		return found;
 	}
-
 }
+

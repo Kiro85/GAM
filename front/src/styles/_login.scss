@@ -165,10 +165,95 @@
         }
     }
 
+    &__button-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        width: 100%;
+        padding: 0 1rem;
+
+        section {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, vars.$second-color, vars.$second-color-2);
+        color: vars.$text-color;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+
+        i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        p {
+            position: relative;
+            z-index: 1;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+
+            i {
+                transform: translateX(5px);
+            }
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        &--option {
+            width: 100%;
+            background: lighten(vars.$second-color, 20%);
+
+            &--active {
+                background: vars.$second-color;
+            }
+
+            &:hover {
+                background: lighten(vars.$second-color, 10%);
+            }
+        }
+
+        &--submit {
+            width: 100%;
+            margin-top: 1rem;
+        }
+    }
+
     &__form {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+    }
+
+    &__form-section {
+        display: none;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        &[data-form="login"] {
+            display: flex;
+        }
     }
 
     &__form-group {
@@ -259,74 +344,6 @@
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.3s ease;
-    }
-
-    &__button {
-        display: none;
-        margin-top: 1rem;
-        padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, vars.$second-color, vars.$second-color-2);
-        color: vars.$text-color;
-        border: none;
-        border-radius: 10px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        position: relative;
-        overflow: hidden;
-
-        &--active {
-            display: flex;
-        }
-
-        i {
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        p {
-            position: relative;
-            z-index: 1;
-        }
-
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
-
-            i {
-                transform: translateX(5px);
-            }
-        }
-
-        &:active {
-            transform: translateY(0);
-        }
-
-        &-group {
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        &--login, &--register {
-            display: flex;
-            width: 50%;
-            background: lighten(vars.$second-color, 20%);
-
-            &--active {
-                background: vars.$second-color;
-            }
-
-            &:hover {
-                background: lighten(vars.$second-color, 10%);
-            }
-        }
     }
 }
 

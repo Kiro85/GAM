@@ -11,7 +11,6 @@
 </head>
 
 <body class="body-login">
-
     <main class="login" id="login">
         <div class="login__decorative login__decorative--top"></div>
         <div class="login__decorative login__decorative--bottom"></div>
@@ -24,50 +23,168 @@
                     <h1 class="login__title">Welcome to <span class="login__title-highlight">GAM</span></h1>
                     <span class="login__title-decoration"></span>
                 </section>
-                <p class="login__subtitle">Login to continue</p>
+                <p class="login__subtitle">Choose an option to continue</p>
+
                 <section class="login__button-group">
                     <button type="button" id="login-btn"
-                        class="login__button login__button--login login__button--login--active">Login</button>
-                    <button type="button" id="register-btn"
-                        class="login__button login__button--register">Register</button>
+                        class="login__button login__button--option login__button--option--active">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <p>Login</p>
+                    </button>
+                    <button type="button" id="register-btn" class="login__button login__button--option">
+                        <i class="bi bi-person-plus"></i>
+                        <p>Register</p>
+                    </button>
+                    <button type="button" id="change-password-btn" class="login__button login__button--option">
+                        <i class="bi bi-key"></i>
+                        <p>Change Password</p>
+                    </button>
                 </section>
             </header>
 
+            <!-- Login Form -->
             <form class="login__form" id="loginForm">
-                <section class="login__form-group">
-                    <label for="username" class="login__label">
-                        <i class="bi bi-person-fill"></i>
-                        <p>Username</p>
-                    </label>
-                    <section class="login__input-container">
-                        <i class="bi bi-person-fill login__icon"></i>
-                        <input type="text" id="username" name="username" class="login__input" required
-                            placeholder="Enter your username">
-                        <div class="login__input-decoration"></div>
+                <section class="login__form-section" data-form="login">
+                    <section class="login__form-group">
+                        <label for="username" class="login__label">
+                            <i class="bi bi-person-fill"></i>
+                            <p>Username</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-person-fill login__icon"></i>
+                            <input type="text" id="username" name="username" class="login__input" required
+                                placeholder="Enter your username" data-action="login-username">
+                            <div class="login__input-decoration"></div>
+                        </section>
                     </section>
+
+                    <section class="login__form-group">
+                        <label for="password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="password" name="password" class="login__input" required
+                                placeholder="Enter your password" data-action="login-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <button type="submit" class="login__button login__button--submit" data-action="login">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <p>Login</p>
+                    </button>
                 </section>
 
-                <section class="login__form-group">
-                    <label for="password" class="login__label">
-                        <i class="bi bi-lock-fill"></i>
-                        <p>Password</p>
-                    </label>
-                    <section class="login__input-container">
-                        <i class="bi bi-lock-fill login__icon"></i>
-                        <input type="password" id="password" name="password" class="login__input" required
-                            placeholder="Enter your password">
-                        <div class="login__input-decoration"></div>
+                <!-- Register Form -->
+                <section class="login__form-section" data-form="register">
+                    <section class="login__form-group">
+                        <label for="reg-username" class="login__label">
+                            <i class="bi bi-person-fill"></i>
+                            <p>Username</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-person-fill login__icon"></i>
+                            <input type="text" id="reg-username" name="reg-username" class="login__input" required
+                                placeholder="Choose a username" data-action="register-username">
+                            <div class="login__input-decoration"></div>
+                        </section>
                     </section>
+
+                    <section class="login__form-group">
+                        <label for="reg-password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="reg-password" name="reg-password" class="login__input" required
+                                placeholder="Choose a password" data-action="register-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <section class="login__form-group">
+                        <label for="reg-repeat-password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>Repeat Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="reg-repeat-password" name="reg-repeat-password"
+                                class="login__input" required placeholder="Repeat your password"
+                                data-action="register-repeat-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <button type="submit" class="login__button login__button--submit" data-action="register">
+                        <i class="bi bi-person-plus"></i>
+                        <p>Register</p>
+                    </button>
                 </section>
 
-                <button type="submit" class="login__button login__button--active" id="login-send" data-action="login">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <p>Login</p>
-                </button>
-                <button type="submit" class="login__button" id="register-send" data-action="register">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <p>Register</p>
-                </button>
+                <!-- Change Password Form -->
+                <section class="login__form-section" data-form="change-password">
+                    <section class="login__form-group">
+                        <label for="change-username" class="login__label">
+                            <i class="bi bi-person-fill"></i>
+                            <p>Username</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-person-fill login__icon"></i>
+                            <input type="text" id="change-username" name="change-username" class="login__input" required
+                                placeholder="Enter your username" data-action="change-username">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <section class="login__form-group">
+                        <label for="old-password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>Current Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="old-password" name="old-password" class="login__input" required
+                                placeholder="Enter your current password" data-action="change-old-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <section class="login__form-group">
+                        <label for="new-password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>New Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="new-password" name="new-password" class="login__input" required
+                                placeholder="Enter your new password" data-action="change-new-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <section class="login__form-group">
+                        <label for="confirm-new-password" class="login__label">
+                            <i class="bi bi-lock-fill"></i>
+                            <p>Confirm New Password</p>
+                        </label>
+                        <section class="login__input-container">
+                            <i class="bi bi-lock-fill login__icon"></i>
+                            <input type="password" id="confirm-new-password" name="confirm-new-password"
+                                class="login__input" required placeholder="Confirm your new password"
+                                data-action="change-confirm-password">
+                            <div class="login__input-decoration"></div>
+                        </section>
+                    </section>
+
+                    <button type="submit" class="login__button login__button--submit" data-action="change-password">
+                        <i class="bi bi-key"></i>
+                        <p>Change Password</p>
+                    </button>
+                </section>
             </form>
         </article>
     </main>

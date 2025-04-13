@@ -1,4 +1,4 @@
-import { login, register, loginButtons } from './modules/login.js';
+import { login, register, changePassword, logout, loginButtons } from './modules/login.js';
 import { checkLoginStatus } from './modules/auth.js';
 
 
@@ -10,10 +10,14 @@ function initAuth() {
             if (e.target.dataset.action === 'register') {
                 e.preventDefault();
                 register();
-                
+
             } else if (e.target.dataset.action === 'login') {
                 e.preventDefault();
                 login();
+
+            } else if (e.target.dataset.action === 'change-password') {
+                e.preventDefault();
+                // changePassword();
             }
         });
     }
@@ -23,5 +27,6 @@ function initAuth() {
 document.addEventListener('DOMContentLoaded', () => {
     loginButtons();
     initAuth();
+    logout();
     checkLoginStatus();
 });

@@ -43,7 +43,6 @@ public class Main {
 		String usersDB = "";
 		try {
 			usersDB = getUsersFromDB();
-			System.out.println(usersDB);
 		} catch (Exception error) {
 			System.out.println("Error al obtener los usuarios de la base de datos: " + error.getMessage());
 		}
