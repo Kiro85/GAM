@@ -11,15 +11,31 @@ public class Main {
 
 	// Methods
 	public static void showUsers() {
-		for (int i = 0; i < users.size(); i++) {
+		for (int i = 0; i < getUsers().size(); i++) {
 			System.out.println("UserID: " + users.get(i).getId());
 			System.out.println("Username: " + users.get(i).getUserName());
 			System.out.println("Password: " + users.get(i).getPassword());
+			System.out.println("Token: " + users.get(i).getAuthToken());
 			System.out.println("--------------------------------");
 		}
 	}
+	
+	private static int searchUser(String username) {
+		boolean found = false;
+		int i = 0;
+		
+		while (!found && i < getUsers().size()) {
+			if (getUsers().get(i).getUserName().equals(username)) {
+				found = true;
+			} else {
+				i++;
+			}
+		}
+		
+		return i;
+	}
 
-	public static void updateUsers() {
+ 	public static void updateUsers() {
 		// Vaciamos la lista actual
 		users = new ArrayList<User>();
 
@@ -130,6 +146,27 @@ public class Main {
 
 		// Devolvemos el resultado
 		return result;
+	}
+	
+	public static void assingTokenToUser(String username, String authToken) {
+		int user = searchUser(username);
+		
+		getUsers().get(user).setAuthToken(authToken);
+	}
+	
+	public static int searchUserByToken(String authToken) {
+		boolean found = false;
+		int i = 0;
+		
+		while (!found && i < getUsers().size()) {
+			if (getUsers().get(i).getAuthToken().equals(authToken)) {
+				found = true;
+			} else {
+				i++;
+			}
+		}
+		
+		return i;
 	}
 
 	// Getters & Setters

@@ -11,6 +11,7 @@ public class User {
     private int id;
     private String userName;
     private String password;
+    private String authToken;
     private ArrayList<Content> library;
     private ArrayList<User> following;
 
@@ -97,5 +98,13 @@ public class User {
 
     public void setCounter() {
         this.counter++;
+    }
+    
+    public String getAuthToken() {
+        return this.authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }

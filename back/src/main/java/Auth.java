@@ -3,9 +3,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Servlet implementation class Auth
@@ -61,10 +61,12 @@ public class Auth extends HttpServlet {
 			System.out.println("Error al autenticar usuario: " + e.getMessage());
 		}
 
-		// si el usuario existe, creamos una sesion
+		// si el usuario existe, generamos un token y lo enviamos
 		try {
 			if (found) {
-				response.getWriter().append("found");
+				String token = UUID.randomUUID().toString();
+				Main.assingTokenToUser(username, token);
+				response.getWriter().append(token);
 			} else {
 				response.getWriter().append("!found");
 			}
@@ -73,10 +75,7 @@ public class Auth extends HttpServlet {
 		}
 
 		// Testing
-		//
 		Main.showUsers();
-		//
-		//
 	}
 
 	// Methods

@@ -8,8 +8,12 @@ function login() {
 
         ehttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                if (this.responseText == "found") {
-                    document.cookie = "loggedIn=true; path=/;";
+                
+                const token = ehttp.responseText; // recibimos el token del bakend
+                
+                if (this.responseText != "!found") {
+                    localStorage.setItem('authToken', token); // lo guardamos en el localStorage
+                    console.log('Inicio de sesión exitoso. Token guardado:', token);
                     window.location.href = "http://localhost:5173/index.html";
                 } else {
                     alert("Usuario o contraseña incorrectos");
