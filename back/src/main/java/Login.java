@@ -55,12 +55,12 @@ public class Login extends HttpServlet {
 			System.out.println("Error al obtener credenciales: " + e.getMessage());
 		}
 
-		// llamamos al metodo para buscar usuario
+		// llamamos al metodo para autentificar usuario
 		boolean found = false;
 		try {
-			found = auth(Main.getUsers(), username, password);
+			found = Main.authUser(username, password);
 		} catch (Exception e) {
-			System.out.println("Error al autenticar usuario: " + e.getMessage());
+			System.out.println("Error al autentificar usuario: " + e.getMessage());
 		}
 
 		// si el usuario existe, generamos un token y lo enviamos
@@ -78,27 +78,6 @@ public class Login extends HttpServlet {
 
 		// Testing
 		Main.showUsers();
-	}
-
-	// Methods
-	public boolean auth(ArrayList<User> users, String username, String password) {
-		boolean found = false;
-
-		// buscamos el usuario en la lista
-		try {
-			int i = 0;
-			do {
-				if (users.get(i).getUserName().equals(username) && users.get(i).getPassword().equals(password)) {
-					found = true;
-				} else {
-					i++;
-				}
-			} while (!found && i < users.size());
-		} catch (Exception e) {
-			System.out.println("Error al buscar el usuario: " + e.getMessage());
-		}
-
-		return found;
 	}
 }
 

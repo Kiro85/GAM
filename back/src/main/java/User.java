@@ -1,15 +1,14 @@
-import java.io.IOException;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-
-import com.mysql.cj.xdevapi.Statement;
-import com.sun.jdi.connect.spi.Connection;
 
 public class User {
     // Attributes
     private int id;
-    private String userName;
+    private String username;
     private String password;
     private String authToken;
     private ArrayList<Content> library;
@@ -20,7 +19,7 @@ public class User {
     // Constructors
     public User(String userName, String password) {
         this.setId(this.getCounter());
-        this.setUserName(userName);
+        this.setUsername(userName);
         this.setPassword(password);
 
         this.setCounter();
@@ -28,7 +27,7 @@ public class User {
     
     public User(int id, String userName, String password) {
         this.setId(id);
-        this.setUserName(userName);
+        this.setUsername(userName);
         this.setPassword(password);
     }
 
@@ -51,6 +50,71 @@ public class User {
         
     }
     
+    public boolean changePassword(String password) {
+    	boolean error = false;
+    	
+    	try {
+    		this.setPassword(password);
+    		error = changePasswordIntoDB(this.getUsername(), password);    		
+    	} catch (Exception e) {
+    		System.out.println("Error al cambiar la contraseña: " + e.getMessage());
+    		error = true;
+    	}
+    	
+    	return error;
+    }
+    
+    private boolean changePasswordIntoDB(String username, String password) {	
+    	boolean error = false;
+    	
+        // Cargamos el driver
+    	try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+	        error = true;
+	    }
+		
+        // Conectamos con la base de datos
+		Connection conBD = null;
+	    try {
+	        conBD = DriverManager.getConnection(
+	                "jdbc:mysql://localhost:3306/gam",
+	                "root", "");
+	    } catch (SQLException e) {
+	        System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+ 
+	    // Creamos la statement
+	    Statement mStm = null;
+	    try {
+	        mStm = conBD.createStatement();
+	    } catch (SQLException e) {
+	        System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+	    
+        // Ejecutamos la query
+	    try {
+	    	String query = "UPDATE users SET password = '"+password+"' WHERE username = '"+username+"'";
+	        mStm.executeUpdate(query);
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+
+        // Cerramos la conexión
+	    try {
+	        mStm.close();
+	        conBD.close();
+	    } catch (SQLException e) {
+	        System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+	    }
+	    
+	    return error;
+    }
+    
     public static void updateCounter() {
     	try {
     		User.counter = Main.getUsers().size() - 1;    		
@@ -68,12 +132,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return this.userName;
+    public String getUsername() {
+        return this.username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

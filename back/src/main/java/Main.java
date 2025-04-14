@@ -13,23 +13,27 @@ public class Main {
 	public static void showUsers() {
 		for (int i = 0; i < getUsers().size(); i++) {
 			System.out.println("UserID: " + users.get(i).getId());
-			System.out.println("Username: " + users.get(i).getUserName());
+			System.out.println("Username: " + users.get(i).getUsername());
 			System.out.println("Password: " + users.get(i).getPassword());
 			System.out.println("Token: " + users.get(i).getAuthToken());
 			System.out.println("--------------------------------");
 		}
 	}
 	
-	private static int searchUser(String username) {
+	public static int searchUser(String username) {
 		boolean found = false;
 		int i = 0;
 		
-		while (!found && i < getUsers().size()) {
-			if (getUsers().get(i).getUserName().equals(username)) {
-				found = true;
-			} else {
-				i++;
-			}
+		try {
+			while (!found && i < getUsers().size()) {
+				if (getUsers().get(i).getUsername().equals(username)) {
+					found = true;
+				} else {
+					i++;
+				}
+			}	
+		} catch (Exception e) {
+			System.out.println("Error al buscar el usuario: " + e.getMessage());
 		}
 		
 		return i;
@@ -124,7 +128,6 @@ public class Main {
 		// Ejecutamos la query
 		try {
 			String query = "SELECT * FROM users";
-			System.out.println(query);
 			ResultSet rs = mStm.executeQuery(query);
 
 			while (rs.next()) {
@@ -166,6 +169,26 @@ public class Main {
 		}
 		
 		return i;
+	}
+	
+	public static boolean authUser(String username, String password) {
+		boolean found = false;
+
+		// buscamos el usuario en la lista
+		try {
+			int i = 0;
+			do {
+				if (Main.getUsers().get(i).getUsername().equals(username) && Main.getUsers().get(i).getPassword().equals(password)) {
+					found = true;
+				} else {
+					i++;
+				}
+			} while (!found && i < users.size());
+		} catch (Exception e) {
+			System.out.println("Error al autentificar el usuario: " + e.getMessage());
+		}
+
+		return found;
 	}
 
 	// Getters & Setters

@@ -4,12 +4,12 @@ function login() {
     let password = document.querySelector('[data-action="login-password"]').value;
 
     try {
-        var ehttp = new XMLHttpRequest();
+        var http = new XMLHttpRequest();
 
-        ehttp.onreadystatechange = function () {
+        http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
 
-                let token = ehttp.responseText; // recibimos el token del bakend
+                let token = http.responseText; // recibimos el token del bakend
 
                 if (this.responseText != "!found") {
                     localStorage.setItem('authToken', token); // lo guardamos en el localStorage
@@ -21,9 +21,9 @@ function login() {
             }
         };
 
-        ehttp.open("POST", "http://localhost:8080/GAM/Login", true);
-        ehttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        ehttp.send("username=" + username + "&password=" + password);
+        http.open("POST", "http://localhost:8080/GAM/Login", true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username + "&password=" + password);
 
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
@@ -34,36 +34,28 @@ function login() {
 function register() { }
 
 // Función para el cambio de contraseña
-function changePassword() { 
+function changePassword() {
     let username = document.querySelector('[data-action="change-username"]').value;
     let oldPassword = document.querySelector('[data-action="change-old-password"]').value;
     let newPassword = document.querySelector('[data-action="change-new-password"]').value;
     let confirmPassword = document.querySelector('[data-action="change-confirm-password"]').value;
 
     try {
-        var ehttp = new XMLHttpRequest();
+        var http = new XMLHttpRequest();
 
-        ehttp.onreadystatechange = function () {
+        http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-
-                let token = ehttp.responseText; // recibimos el token del bakend
-
-                if (this.responseText != "!found") {
-                    localStorage.setItem('authToken', token); // lo guardamos en el localStorage
-                    console.log('Inicio de sesión exitoso. Token guardado:', token);
-                    window.location.href = "http://localhost:5173/index.html";
-                } else {
-                    alert("Usuario o contraseña incorrectos");
-                }
+                alert(this.responseText);
+                window.location.reload();
             }
         };
 
-        ehttp.open("POST", "http://localhost:8080/GAM/Auth", true);
-        ehttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        ehttp.send("username=" + username + "&password=" + password);
+        http.open("POST", "http://localhost:8080/GAM/ChangePassword", true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username + "&oldPassword=" + oldPassword + "&newPassword=" + newPassword + "&confirmPassword=" + confirmPassword);
 
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        console.error('Error al cambiar contraseña:', error);
     }
 }
 
@@ -106,36 +98,61 @@ function loginButtons() {
         changePasswordBtn.classList.remove('login__button--option--active');
     }
 
+    // Función para manejar los campos required
+    function handleRequiredFields(formType) {
+        // Quitar required de todos los campos
+        document.querySelectorAll('input[required]').forEach(input => {
+            input.removeAttribute('required');
+        });
+
+        // Agregar required a los campos del formulario activo
+        if (formType === 'login') {
+            document.querySelector('[data-action="login-username"]').setAttribute('required', '');
+            document.querySelector('[data-action="login-password"]').setAttribute('required', '');
+        } else if (formType === 'register') {
+            document.querySelector('[data-action="register-username"]').setAttribute('required', '');
+            document.querySelector('[data-action="register-password"]').setAttribute('required', '');
+            document.querySelector('[data-action="register-repeat-password"]').setAttribute('required', '');
+        } else if (formType === 'change-password') {
+            document.querySelector('[data-action="change-username"]').setAttribute('required', '');
+            document.querySelector('[data-action="change-old-password"]').setAttribute('required', '');
+            document.querySelector('[data-action="change-new-password"]').setAttribute('required', '');
+            document.querySelector('[data-action="change-confirm-password"]').setAttribute('required', '');
+        }
+    }
+
     // Función para manejar el clic en los botones
-    function handleButtonClick(button, form) {
+    function handleButtonClick(button, form, formType) {
         deactivateAllButtons();
         hideAllForms();
         button.classList.add('login__button--option--active');
         form.style.display = 'flex';
+        handleRequiredFields(formType);
     }
 
     // Event listeners para los botones
     if (loginBtn) {
         loginBtn.addEventListener('click', () => {
-            handleButtonClick(loginBtn, loginForm);
+            handleButtonClick(loginBtn, loginForm, 'login');
         });
     }
 
     if (registerBtn) {
         registerBtn.addEventListener('click', () => {
-            handleButtonClick(registerBtn, registerForm);
+            handleButtonClick(registerBtn, registerForm, 'register');
         });
     }
 
     if (changePasswordBtn) {
         changePasswordBtn.addEventListener('click', () => {
-            handleButtonClick(changePasswordBtn, changePasswordForm);
+            handleButtonClick(changePasswordBtn, changePasswordForm, 'change-password');
         });
     }
 
     // Mostrar el formulario de login por defecto
     if (loginForm) {
         loginForm.style.display = 'flex';
+        handleRequiredFields('login');
     }
 }
 

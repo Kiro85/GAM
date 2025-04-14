@@ -250,10 +250,6 @@
         display: none;
         flex-direction: column;
         gap: 1.5rem;
-
-        &[data-form="login"] {
-            display: flex;
-        }
     }
 
     &__form-group {

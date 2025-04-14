@@ -4,20 +4,25 @@ import { checkLoginStatus } from './modules/auth.js';
 
 // Función para inicializar el login
 function initAuth() {
-    let form = document.getElementById('loginForm');
+    const form = document.getElementById('loginForm');
     if (form) {
-        form.addEventListener('click', (e) => {
-            if (e.target.dataset.action === 'register') {
-                e.preventDefault();
-                register();
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitButton = e.submitter;
+            const action = submitButton.dataset.action;
 
-            } else if (e.target.dataset.action === 'login') {
-                e.preventDefault();
-                login();
-
-            } else if (e.target.dataset.action === 'change-password') {
-                e.preventDefault();
-                // changePassword();
+            switch (action) {
+                case 'login':
+                    login();
+                    break;
+                case 'register':
+                    register();
+                    break;
+                case 'change-password':
+                    changePassword();
+                    break;
+                default:
+                    console.error('Acción no válida:', action);
             }
         });
     }
