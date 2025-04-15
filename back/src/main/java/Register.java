@@ -53,6 +53,12 @@ public class Register extends HttpServlet {
 			System.out.println("Error al obtener credenciales: " + e.getMessage());
 		}
 		
+		// Comprobamos que la contraseña nueva coincida con la repetición de la misma
+		boolean correctPassword = false;
+		if (password.equals(repeatPassword)) {
+			correctPassword = true;
+		}
+		
 		// Comprobamos que el usuario no exista
 		boolean exists = false;
 		try {
@@ -64,12 +70,14 @@ public class Register extends HttpServlet {
 		// Si no existe, creamos el usuario
 		boolean error = false;
 		if (!exists) {
-			error = User.createUser(username, repeatPassword, Main.getUsers());
+			error = User.createUser(username, password, Main.getUsers());
 		}
 		
 		// Devolvemos la respuesta
 		try {
-			if (!exists) {
+			if (!correctPassword){
+				response.getWriter().append("Las constraseñas introducidas no coinciden.");
+			} else if (exists) {
 				response.getWriter().append("El usuario ya existe");
 			} else if (error) {
 				response.getWriter().append("Ha ocurrido un problema en el servidor");

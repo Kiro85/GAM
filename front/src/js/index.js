@@ -1,6 +1,6 @@
 import { login, register, changePassword, logout, loginButtons } from './modules/login.js';
 import { checkLoginStatus } from './modules/auth.js';
-
+import { showAnimes } from './modules/showAnimes.js';
 
 // Función para inicializar el login
 function initAuth() {
@@ -34,4 +34,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initAuth();
     logout();
     checkLoginStatus();
+    showAnimes();
 });

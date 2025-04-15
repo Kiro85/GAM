@@ -1,16 +1,17 @@
-import { optimizeImageUrl, imageObserver } from './imageLoader.js';
 import { showAnimeModal } from './modal.js';
 
 export function createAnimeCard(anime) {
+    // Creamos el elemento de la card
     const card = document.createElement('article');
     card.classList.add('card');
 
+    // Creamos el template de la card
     const template = `
         <section class="card__content">
             <section class="card__back">
                 <section class="card__back-content">
                     <img class="card__back-img" 
-                         data-src="${optimizeImageUrl(anime.images.webp.large_image_url, 'small')}" 
+                         src="${anime.images.webp.large_image_url}" 
                          alt="portada"
                          loading="lazy">
                 </section>
@@ -19,7 +20,7 @@ export function createAnimeCard(anime) {
             <section class="card__front">
                 <section class="card__front-container-img">
                     <img class="card__front-img" 
-                         data-src="${optimizeImageUrl(anime.images.webp.image_url, 'small')}" 
+                         src="${anime.images.webp.image_url}" 
                          alt="contraportada"
                          loading="lazy">
                 </section>
@@ -37,14 +38,12 @@ export function createAnimeCard(anime) {
         </section>
     `;
 
+    // Insertamos el template en la card
     card.innerHTML = template;
 
-    // Observar imágenes para lazy loading
-    const images = card.querySelectorAll('img[data-src]');
-    images.forEach(img => imageObserver.observe(img));
-
-    // Agregar evento de clic para mostrar el modal
+    // Agregamos el evento de clic para mostrar el modal
     card.addEventListener("click", () => showAnimeModal(anime));
 
+    // Devolvemos la card
     return card;
 } 
