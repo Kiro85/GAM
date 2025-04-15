@@ -33,21 +33,73 @@ public class User {
 
 
     // Methods
-    public void createUser(String userName, String password, ArrayList<User> users) {
+    public static boolean createUser(String username, String password, ArrayList<User> users) {
+    	boolean error = false;
+    	
         try {
 
-            User user = new User(userName, password);
+            User user = new User(username, password);
             users.add(user);
 
-            addUserToDB(user);
+            error = addUserToDB(user); // Una vez creado, lo añadimos a la base de datos
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error al crear usuario o añadirlo a la BD: " + e.getMessage());
+            error = true;
         }
+        
+        return error;
     }
 
-    private void addUserToDB(User user) {
-        
+    private static boolean addUserToDB(User user) {
+    	boolean error = false;
+    	
+        // Cargamos el driver
+    	try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+	        error = true;
+	    }
+		
+        // Conectamos con la base de datos
+		Connection conBD = null;
+	    try {
+	        conBD = DriverManager.getConnection(
+	                "jdbc:mysql://localhost:3306/gam",
+	                "root", "");
+	    } catch (SQLException e) {
+	        System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+ 
+	    // Creamos la statement
+	    Statement mStm = null;
+	    try {
+	        mStm = conBD.createStatement();
+	    } catch (SQLException e) {
+	        System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+	    
+        // Ejecutamos la query
+	    try {
+	    	String query = "INSERT INTO users (id, username, password) VALUES ('"+ user.getId() +"', '"+ user.getUsername() +"', '"+ user.getPassword() +"')";
+	        mStm.executeUpdate(query);
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+	        error = true;
+	    }
+
+        // Cerramos la conexión
+	    try {
+	        mStm.close();
+	        conBD.close();
+	    } catch (SQLException e) {
+	        System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+	    }
+	    
+	    return error;
     }
     
     public boolean changePassword(String password) {

@@ -31,7 +31,29 @@ function login() {
 }
 
 // Función para el registro
-function register() { }
+function register() { 
+    let username = document.querySelector('[data-action="register-username"]').value;
+    let password = document.querySelector('[data-action="register-password"]').value;
+    let repeatPassword = document.querySelector('[data-action="register-repeat-password"]').value;
+
+    try {
+        var http = new XMLHttpRequest();
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                window.location.reload();
+            }
+        };
+
+        http.open("POST", "http://localhost:8080/GAM/Register", true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username + "&password=" + password + "&repeatPassword=" + repeatPassword);
+
+    } catch (error) {
+        console.error('Error al registrar:', error);
+    }
+}
 
 // Función para el cambio de contraseña
 function changePassword() {

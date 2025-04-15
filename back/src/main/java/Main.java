@@ -178,12 +178,32 @@ public class Main {
 		try {
 			int i = 0;
 			do {
-				if (Main.getUsers().get(i).getUsername().equals(username) && Main.getUsers().get(i).getPassword().equals(password)) {
+				if (getUsers().get(i).getUsername().equals(username) && Main.getUsers().get(i).getPassword().equals(password)) {
 					found = true;
 				} else {
 					i++;
 				}
-			} while (!found && i < users.size());
+			} while (!found && i < getUsers().size());
+		} catch (Exception e) {
+			System.out.println("Error al autentificar el usuario: " + e.getMessage());
+		}
+
+		return found;
+	}
+	
+	public static boolean searchIfUserExists(String username) {
+		boolean found = false;
+
+		// buscamos el usuario en la lista
+		try {
+			int i = 0;
+			do {
+				if (getUsers().get(i).getUsername().equals(username)) {
+					found = true;
+				} else {
+					i++;
+				}
+			} while (!found && i < getUsers().size());
 		} catch (Exception e) {
 			System.out.println("Error al autentificar el usuario: " + e.getMessage());
 		}
