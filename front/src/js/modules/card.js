@@ -26,7 +26,7 @@ export function createAnimeCard(anime) {
                 </section>
 
                 <section class="card__front-content">
-                    <small class="card__badge">${anime.title}</small>
+                    <small class="card__badge">${anime.title_english || anime.title}</small>
                     <section class="card__description">
                         <header class="card__title">
                             <h3 class="card__title-text"><strong>Top: #${anime.rank}</strong></h3>

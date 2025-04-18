@@ -25,7 +25,7 @@ export async function showAnimeModal(anime) {
             document.body.style.overflow = "hidden";
     
             // Actualizamos el contenido del modal
-            modalTitle.textContent = anime.title;
+            modalTitle.textContent = anime.title_english || anime.title;
             modalDetails.innerHTML = `
                 <div><strong>Rank:</strong> #${anime.rank}</div>
                 <div><strong>Episodios:</strong> ${anime.episodes || "N/A"}</div>

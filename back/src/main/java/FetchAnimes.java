@@ -66,7 +66,8 @@ public class FetchAnimes extends HttpServlet {
 			// Obtenemos el estado de la respuesta
 			int status = conn.getResponseCode();
 			if (status != 200) {
-				throw new RuntimeException("Ha ocurrido un error: " + status); // Si el estado no es 200, lanzamos una excepción
+				throw new RuntimeException("Ha ocurrido un error: " + status); // Si el estado no es 200, lanzamos una
+																				// excepción
 			} else {
 				// Leemos los datos
 				StringBuilder info = new StringBuilder(); // variable que enviaremos al frontend
