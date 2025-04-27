@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../src/styles/index.scss">
     <script type="module" src="../src/js/index.js" defer></script>
-    <script type="module" src="../src/js/anime.js" defer></script>
 </head>
 
 <body>
@@ -53,60 +52,60 @@
 
     <main class="home">
         <!-- ASIDE GENEROS -->
-        <aside class="genres genres--user" id="genres">
+        <aside class="genres genres--user">
             <section class="genres__logo"></section>
-
+      
             <section class="genres__opciones" id="genres"></section>
-
+      
             <section class="genres__años">
-                <span class="genres__años-titulo">AÑOS</span>
-                <div class="genres__años-contenedor">
-                    <input class="genres__año" type="number" placeholder="1950" maxlength="4" min="1950">
-                    <span class="genres__año-separador">-</span>
-                    <input class="genres__año" type="number" placeholder="2025" maxlength="4" min="2025">
-                </div>
+              <span class="genres__años-titulo">YEARS</span>
+              <div class="genres__años-contenedor">
+                <input class="genres__año" type="number" placeholder="1950" maxlength="4" min="1950">
+                <span class="genres__año-separador">-</span>
+                <input class="genres__año" type="number" placeholder="2025" maxlength="4" min="2025">
+              </div>
             </section>
-
+      
             <section class="genres__contenedor-boton">
-                <button class="btn-genres btn-genres--buscar">Buscar</button>
+              <button class="btn-genres btn-genres--clear">Clear</button>
             </section>
-        </aside>
+          </aside>
 
         <!-- MAIN -->
-        <section class="main main--user">
+        <section class="main">
             <section class="main__content-selector">
-                <button class="selector"><span class="selector__text">Catalogo</span></button>
-                <button class="selector"><span class="selector__text">Tops</span></button>
+              <button class="selector"><span class="selector__text">Catalog</span></button>
+              <button class="selector"><span class="selector__text">Tops</span></button>
             </section>
-            <section class="main__categories-selector">
-                <button class="selector"><span class="selector__text">Juegos</span></button>
-                <button class="selector"><span class="selector__text">Animes</span></button>
-                <button class="selector"><span class="selector__text">Magas</span></button>
+            <section class="main__categories-selector" id="categories">
+              <button class="selector" data-action="games"><span class="selector__text">Games</span></button>
+              <button class="selector active" data-action="animes"><span class="selector__text">Animes</span></button>
+              <button class="selector" data-action="mangas"><span class="selector__text">Mangas</span></button>
             </section>
-
+      
             <section class="main__search">
-                <section class="search">
-                    <i class="search__icon bi bi-search"></i>
-                    <input class="search__input" type="search" placeholder="Buscar...">
-                </section>
+              <section class="search">
+                <i class="search__icon bi bi-search"></i>
+                <input class="search__input" type="search" id="search" placeholder="Search...">
+              </section>
             </section>
-
+      
             <section class="main__content" id="content"></section>
-
+      
             <!-- paginación -->
-            <section class="main__pages">
-                <button class="btn" id="prev">Anterior</button>
-                <button class="btn" id="next">Siguiente</button>
+            <section class="main__pages" id="pages">
+              <button class="btn" id="prev">Previous</button>
+              <button class="btn" id="next">Next</button>
             </section>
-        </section>
+          </section>
     </main>
 
     <!-- Modal para mostrar detalles del anime -->
-    <article class="modal" id="animeModal">
+    <article class="modal" id="modal">
         <section class="modal__content">
             <span class="modal__close">&times;</span>
             <header class="modal__header">
-                <img class="modal__image" src="" alt="Anime cover">
+                <img class="modal__image" src="" alt="Cover">
                 <section class="modal__info">
                     <h2 class="modal__title"></h2>
                     <p class="modal__details"></p>

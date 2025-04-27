@@ -23,6 +23,10 @@
   font-family: vars.$font-main;
   font-weight: 600;
 
+  &.active {
+    background-color: vars.$second-color;
+  }
+
   &:before {
     content: "";
     position: absolute;
@@ -53,7 +57,7 @@
     transition: background 0s;
   }
 
-  &--buscar {
+  &--clear {
     background-color: vars.$second-color;
 
     &:before {

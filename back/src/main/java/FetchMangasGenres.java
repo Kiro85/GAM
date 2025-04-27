@@ -11,16 +11,16 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * Servlet implementation class FetchAnimesGenres
+ * Servlet implementation class FetchMangasGenres
  */
-@WebServlet("/FetchAnimesGenres")
-public class FetchAnimesGenres extends HttpServlet {
+@WebServlet("/FetchMangasGenres")
+public class FetchMangasGenres extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FetchAnimesGenres() {
+    public FetchMangasGenres() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,7 +36,7 @@ public class FetchAnimesGenres extends HttpServlet {
 		// Hacemos el fetch a la API
 		try {
 			// Abrimos la conexión
-			URL url = new URL("https://api.jikan.moe/v4/genres/anime?filter=genres");
+			URL url = new URL("https://api.jikan.moe/v4/genres/manga?filter=genres");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.connect();
@@ -62,8 +62,8 @@ public class FetchAnimesGenres extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			response.getWriter().append("Error al obtener animes: " + e.getMessage());
-			System.out.println("Error al obtener generos animes: " + e.getMessage());
+			response.getWriter().append("Error al obtener mangas: " + e.getMessage());
+			System.out.println("Error al obtener generos mangas: " + e.getMessage());
 		}
 	}
 
@@ -71,7 +71,6 @@ public class FetchAnimesGenres extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

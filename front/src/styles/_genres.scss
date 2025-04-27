@@ -108,7 +108,14 @@
 
     .error-message {
         background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+        margin: 0 13px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
         width: 100%;
+        height: 100%;
         padding: 20px;
         border-radius: 10px;
         text-align: center;
@@ -130,15 +137,30 @@
         }
     }
 
+    .reload-button {
+        background-color: #ff4757;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
     .loading-state {
         background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
         padding: 20px;
+        margin: 0 17px;
+        width: 100%;
         border-radius: 10px;
         text-align: center;
         color: #fff;
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         animation: modalAppear 0.2s ease-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 60px 0;
 
         i {
             font-size: 32px;

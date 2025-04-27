@@ -1,4 +1,3 @@
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,16 +9,16 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * Servlet implementation class FetchAnimes
+ * Servlet implementation class FetchMangas
  */
-@WebServlet("/FetchAnimes")
-public class FetchAnimes extends HttpServlet {
+@WebServlet("/FetchMangas")
+public class FetchMangas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public FetchAnimes() {
+	public FetchMangas() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -35,7 +34,7 @@ public class FetchAnimes extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		String apiUrl = null;
-		
+
 		try {
 			// Obtenemos los parametros de la petición
 			String page = request.getParameter("page");
@@ -43,26 +42,26 @@ public class FetchAnimes extends HttpServlet {
 			String search = request.getParameter("search");
 
 			// Si no hay pagina, la establecemos a 1
-			if (page == null || page.isEmpty())
+			if (page == null || page.isEmpty()) {
 				page = "1";
-
-			// Establecemos la url de la API
-			apiUrl = "https://api.jikan.moe/v4/top/anime?page=" + page;
-
-			// Si hay genero, añadimos el genero a la url
-			if (genre != null && !genre.isEmpty()) {
-				apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&genres=" + genre;
 			}
 
-			// Si hay busqueda, añadimos la busqueda a la url
+			// Establecemos la url base de la API
+			apiUrl = "https://api.jikan.moe/v4/top/manga?page=" + page;
+
+			// Si hay búsqueda, cambiamos la URL base
 			if (search != null && !search.isEmpty()) {
-				apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&q="
+				apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&q="
 						+ java.net.URLEncoder.encode(search, "UTF-8");
+			}
+			// Si hay género, cambiamos la URL base
+			else if (genre != null && !genre.isEmpty()) {
+				apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&genres=" + genre;
 			}
 
 		} catch (Exception e) {
-			response.getWriter().append("Error al obtener animes: " + e.getMessage());
-			System.out.println("Error al obtener animes: " + e.getMessage());
+			response.getWriter().append("Error al obtener mangas: " + e.getMessage());
+			System.out.println("Error al obtener mangas: " + e.getMessage());
 		}
 
 		// Hacemos el fetch a la API
@@ -95,8 +94,8 @@ public class FetchAnimes extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			response.getWriter().append("Error al obtener animes: " + e.getMessage());
-			System.out.println("Error al obtener animes: " + e.getMessage());
+			response.getWriter().append("Error al obtener mangas: " + e.getMessage());
+			System.out.println("Error al obtener mangas: " + e.getMessage());
 		}
 	}
 
@@ -106,7 +105,6 @@ public class FetchAnimes extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
