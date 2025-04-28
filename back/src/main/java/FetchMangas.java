@@ -34,29 +34,35 @@ public class FetchMangas extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		String apiUrl = null;
+		String limit = request.getParameter("limit");
 
 		try {
-			// Obtenemos los parametros de la petición
-			String page = request.getParameter("page");
-			String genre = request.getParameter("genre");
-			String search = request.getParameter("search");
+			if (limit != null && !limit.isEmpty()) {
+				apiUrl = "https://api.jikan.moe/v4/top/manga?limit=" + limit;
+				
+			} else {
+				// Obtenemos los parametros de la petición
+				String page = request.getParameter("page");
+				String genre = request.getParameter("genre");
+				String search = request.getParameter("search");
 
-			// Si no hay pagina, la establecemos a 1
-			if (page == null || page.isEmpty()) {
-				page = "1";
-			}
+				// Si no hay pagina, la establecemos a 1
+				if (page == null || page.isEmpty()) {
+					page = "1";
+				}
 
-			// Establecemos la url base de la API
-			apiUrl = "https://api.jikan.moe/v4/top/manga?page=" + page;
+				// Establecemos la url base de la API
+				apiUrl = "https://api.jikan.moe/v4/top/manga?page=" + page;
 
-			// Si hay búsqueda, cambiamos la URL base
-			if (search != null && !search.isEmpty()) {
-				apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&q="
-						+ java.net.URLEncoder.encode(search, "UTF-8");
-			}
-			// Si hay género, cambiamos la URL base
-			else if (genre != null && !genre.isEmpty()) {
-				apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&genres=" + genre;
+				// Si hay búsqueda, cambiamos la URL base
+				if (search != null && !search.isEmpty()) {
+					apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&q="
+							+ java.net.URLEncoder.encode(search, "UTF-8");
+				}
+				// Si hay género, cambiamos la URL base
+				else if (genre != null && !genre.isEmpty()) {
+					apiUrl = "https://api.jikan.moe/v4/manga?page=" + page + "&genres=" + genre;
+				}
 			}
 
 		} catch (Exception e) {

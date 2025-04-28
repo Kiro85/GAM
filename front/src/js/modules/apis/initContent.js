@@ -1,6 +1,5 @@
-import { showAnimes, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch } from './anime.js';
-import { showMangas, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch } from './mangas.js';
-// import { showGames } from './games.js';
+import { showAnimes, showAnimesTops, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch } from './anime.js';
+import { showMangas, showMangasTops, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch } from './mangas.js';
 
 let currentCategory = 'mangas'; // Para mantener un registro de la categoría 
 
@@ -26,8 +25,30 @@ function removeEventListeners() {
     }
 }
 
+// Función para resetear el selector a catalog
+function resetSelectorToCatalog() {
+    const selector = document.getElementById('selector');
+    const content = document.getElementById('content');
+
+    if (selector && content) {
+        // Quitamos la clase active de todos los botones
+        selector.querySelectorAll('button').forEach(btn => {
+            btn.classList.remove('selector--active');
+        });
+
+        // Añadimos la clase active al botón de catalog
+        const catalogButton = selector.querySelector('#catalog');
+        if (catalogButton) {
+            catalogButton.classList.add('selector--active');
+        }
+
+        // Actualizamos el estado del contenido
+        content.dataset.action = 'catalog';
+    }
+}
+
 // Función para inicializar el contenido
-export function initContent() {
+function initContent() {
     const categories = document.getElementById('categories');
 
     // Función para manejar la lógica de cada categoría
@@ -45,21 +66,36 @@ export function initContent() {
         // Actualizar la categoría actual
         currentCategory = action;
 
+        // Obtenemos el estado actual del selector (catalog/tops)
+        const currentAction = content.dataset.action || 'catalog';
+
         switch (action) {
             case 'animes':
-                showAnimes({ page: 1 }); // Aseguramos que empiece en la primera página
                 showAnimesGenres();
                 animePages();
                 filterByAnimeGenre(currentCategory);
                 filterByAnimeSearch();
+                handleContent(currentCategory);
+                // Mantenemos el estado del selector
+                if (currentAction === 'tops') {
+                    showAnimesTops();
+                } else {
+                    showAnimes({ page: 1 });
+                }
                 break;
 
             case 'mangas':
-                showMangas({ page: 1 }); // Aseguramos que empiece en la primera página
                 showMangasGenres();
                 mangaPages();
                 filterByMangaGenre(currentCategory);
                 filterByMangaSearch();
+                handleContent(currentCategory);
+                // Mantenemos el estado del selector
+                if (currentAction === 'tops') {
+                    showMangasTops();
+                } else {
+                    showMangas({ page: 1 });
+                }
                 break;
             default:
                 console.log('Categoría no reconocida:', action);
@@ -68,7 +104,7 @@ export function initContent() {
 
     if (categories) {
         // Primero, buscamos el botón activo. Esto es para la primera carga de la página
-        const activeButton = categories.querySelector('.active');
+        const activeButton = categories.querySelector('.selector--active');
 
         // Si hay un botón activo, ejecutamos su acción
         if (activeButton && activeButton.dataset.action) {
@@ -80,12 +116,12 @@ export function initContent() {
             const button = e.target.closest('[data-action]');
             if (button) {
                 // Quitamos la clase active de todos los botones
-                categories.querySelectorAll('.active').forEach(btn => {
-                    btn.classList.remove('active');
+                categories.querySelectorAll('.selector--active').forEach(btn => {
+                    btn.classList.remove('selector--active');
                 });
 
                 // Añadimos la clase active al botón clickeado
-                button.classList.add('active');
+                button.classList.add('selector--active');
 
                 // Ejecutamos la acción
                 handleCategory(button.dataset.action);
@@ -93,3 +129,53 @@ export function initContent() {
         });
     }
 }
+
+// Función para manejar el selector de contenido (catalogo y tops)
+function handleContent(currentCategory) {
+    const content = document.getElementById('content');
+    const selector = document.getElementById('selector');
+
+    if (content && selector) {
+        // Quitamos cualquier event listener anterior
+        const newSelector = selector.cloneNode(true);
+        selector.parentNode.replaceChild(newSelector, selector);
+
+        // Obtenemos el estado actual del selector
+        const currentAction = content.dataset.action || 'catalog';
+
+        // Añadimos el nuevo event listener
+        newSelector.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+
+            // Quitamos la clase active de todos los botones
+            newSelector.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('selector--active');
+            });
+
+            // Añadimos la clase active al botón clickeado
+            button.classList.add('selector--active');
+
+            if (button.id === 'catalog') {
+                content.dataset.action = 'catalog';
+                currentCategory === 'animes' ? showAnimes({ page: 1 }) : showMangas({ page: 1 });
+            } else if (button.id === 'tops') {
+                content.dataset.action = 'tops';
+                currentCategory === 'animes' ? showAnimesTops() : showMangasTops();
+            }
+        });
+
+        // Establecemos el estado inicial basado en el estado actual
+        const activeButton = newSelector.querySelector(`#${currentAction}`);
+        if (activeButton) {
+            activeButton.classList.add('selector--active');
+        } else {
+            // Si no hay estado actual, usamos catalog por defecto
+            const catalogButton = newSelector.querySelector('#catalog');
+            if (catalogButton) {
+                catalogButton.classList.add('selector--active');
+            }
+        }
+    }
+}
+
+export { initContent, resetSelectorToCatalog };

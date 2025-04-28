@@ -153,6 +153,177 @@
         line-height: 1.8;
     }
 
+    &__actions {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(vars.$text-color, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__add-btn {
+        background: linear-gradient(135deg, vars.$second-color, vars.$second-color-2);
+        color: vars.$text-color;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(vars.$second-color, 0.3);
+        }
+
+        i {
+            font-size: 20px;
+        }
+    }
+
+    &__rating {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        label {
+            color: vars.$text-color;
+            font-weight: 600;
+        }
+
+        &-stars {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(vars.$text-color, 0.1);
+            border-radius: 3px;
+            outline: none;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                background: vars.$second-color;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+        }
+
+        &-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: vars.$second-color;
+            min-width: 30px;
+            text-align: center;
+        }
+    }
+
+    &__top {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: linear-gradient(135deg, rgba(vars.$main-color-2, 0.1), rgba(vars.$main-color, 0.1));
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid rgba(vars.$text-color, 0.1);
+        box-shadow: 0 4px 20px rgba(vars.$second-color, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+            border-color: rgba(vars.$second-color, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(vars.$second-color, 0.15);
+        }
+
+        label {
+            color: vars.$text-color;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            &::before {
+                content: '🏆';
+                font-size: 24px;
+                filter: drop-shadow(0 2px 4px rgba(vars.$second-color, 0.3));
+                animation: trophyGlow 2s infinite alternate;
+            }
+        }
+
+        &-select {
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(vars.$text-color, 0.1);
+            background: rgba(vars.$main-color, 0.3);
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 20px;
+            padding-right: 45px;
+
+            &:hover {
+                border-color: rgba(vars.$second-color, 0.4);
+                background-color: rgba(vars.$main-color, 0.4);
+                transform: translateY(-1px);
+            }
+
+            &:focus {
+                outline: none;
+                border-color: vars.$second-color;
+                box-shadow: 0 0 0 3px rgba(vars.$second-color, 0.2);
+                background-color: rgba(vars.$main-color, 0.5);
+            }
+
+            option {
+                background-color: vars.$main-color;
+                color: vars.$text-color;
+                padding: 12px;
+                font-size: 15px;
+
+                &:hover {
+                    background-color: vars.$second-color;
+                    color: vars.$main-color;
+                }
+            }
+        }
+    }
+
+    @keyframes trophyGlow {
+        from {
+            filter: drop-shadow(0 2px 4px rgba(vars.$second-color, 0.3));
+        }
+
+        to {
+            filter: drop-shadow(0 2px 8px rgba(vars.$second-color, 0.6));
+        }
+    }
+
     @keyframes modalAppear {
         from {
             opacity: 0;

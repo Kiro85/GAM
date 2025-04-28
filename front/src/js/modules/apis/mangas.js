@@ -1,7 +1,9 @@
 import { fetchMangas } from './fetchMangas';
 import { fetchMangasGenres } from './fetchMangasGenres';
 import { createCard } from '../display/card';
+import { createTop } from '../display/tops';
 import { debounce, showError, showLoadingState } from './apiControl';
+import { resetSelectorToCatalog } from './initContent';
 
 // Variables para mantener el estado
 let currentPage = 1;
@@ -30,6 +32,33 @@ function showMangas({ page = 1, genre = '', search = '' } = {}) {
             .catch(error => {
                 console.error('Error al obtener mangas:', error);
                 showError(content, error, { page, genre, search }, showMangas);
+            });
+    }
+}
+
+// Función para mostrar los mangas en tops
+function showMangasTops() {
+    const content = document.getElementById('content');
+
+    if (content) {
+        // Mostramos el estado de carga
+        showLoadingState(content);
+
+        fetchMangas({ limit: 10 })
+            .then(data => {
+                if (data.data && data.data.length > 0) {
+                    content.innerHTML = ''; // Limpiamos el loading
+                    data.data.forEach((manga, i) => {
+                        let top = createTop('manga', manga);
+                        content.appendChild(top);
+                    });
+                } else {
+                    showError(content, '404', null, showMangasTops);
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener mangas:', error);
+                showError(content, error, null, showMangasTops);
             });
     }
 }
@@ -102,6 +131,7 @@ function filterByMangaGenre(currentCategory) {
                 const genreId = e.target.getAttribute('data-genre-id');
                 currentPage = 1;
                 currentGenre = genreId;
+                resetSelectorToCatalog();
                 showMangas({ page: currentPage, genre: currentGenre, search: '' });
 
                 genre.querySelectorAll('.btn-genres').forEach(btn => {
@@ -131,6 +161,7 @@ function filterByMangaSearch() {
                 document.querySelectorAll('.btn-genres').forEach(btn => {
                     btn.classList.remove('active');
                 });
+                resetSelectorToCatalog();
                 showMangas({ page: currentPage, genre: currentGenre, search: searchTerm });
             }
         }, 500);
@@ -143,4 +174,4 @@ function filterByMangaSearch() {
     }
 }
 
-export { showMangas, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch };
+export { showMangas, showMangasTops, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch };

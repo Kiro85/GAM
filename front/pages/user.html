@@ -73,16 +73,17 @@
 
         <!-- MAIN -->
         <section class="main">
-            <section class="main__content-selector">
+            <!-- Selectores -->
+            <section class="main__content-selector" id="selector">
               <button class="selector"><span class="selector__text">Catalog</span></button>
               <button class="selector"><span class="selector__text">Tops</span></button>
             </section>
             <section class="main__categories-selector" id="categories">
-              <button class="selector" data-action="games"><span class="selector__text">Games</span></button>
-              <button class="selector active" data-action="animes"><span class="selector__text">Animes</span></button>
+              <button class="selector selector--active" data-action="animes"><span class="selector__text">Animes</span></button>
               <button class="selector" data-action="mangas"><span class="selector__text">Mangas</span></button>
             </section>
-      
+            
+            <!-- Buscador -->
             <section class="main__search">
               <section class="search">
                 <i class="search__icon bi bi-search"></i>
@@ -90,7 +91,8 @@
               </section>
             </section>
       
-            <section class="main__content" id="content"></section>
+            <!-- Contenido -->
+            <section class="main__content" id="content" data-action="catalog"></section>
       
             <!-- paginación -->
             <section class="main__pages" id="pages">
@@ -113,6 +115,34 @@
             </header>
             <section class="modal__body">
                 <p class="modal__synopsis"></p>
+            </section>
+            <section class="modal__actions">
+              <button class="modal__add-btn" id="addToCollection">
+                <i class="bi bi-plus-circle"></i> Add to collection
+              </button>
+              <div class="modal__rating">
+                <label for="rating">Your rating:</label>
+                <div class="modal__rating-stars">
+                  <input type="range" id="rating" min="0" max="10" step="0.5" value="0">
+                  <span class="modal__rating-value">0</span>
+                </div>
+              </div>
+              <div class="modal__top10">
+                <label for="topSelect">Add to my Top 10:</label>
+                <select id="topSelect" class="modal__top-select">
+                  <option value="">Select position</option>
+                  <option value="1">#1</option>
+                  <option value="2">#2</option>
+                  <option value="3">#3</option>
+                  <option value="4">#4</option>
+                  <option value="5">#5</option>
+                  <option value="6">#6</option>
+                  <option value="7">#7</option>
+                  <option value="8">#8</option>
+                  <option value="9">#9</option>
+                  <option value="10">#10</option>
+                </select>
+              </div>
             </section>
         </section>
     </article>

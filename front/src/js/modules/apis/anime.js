@@ -1,7 +1,9 @@
 import { fetchAnimes } from './fetchAnimes';
 import { fetchAnimesGenres } from './fetchAnimesGenres';
 import { createCard } from '../display/card';
+import { createTop } from '../display/tops';
 import { debounce, showError, showLoadingState } from './apiControl';
+import { resetSelectorToCatalog } from './initContent';
 
 // Variables para mantener el estado
 let currentPage = 1;
@@ -30,6 +32,33 @@ function showAnimes({ page = 1, genre = '', search = '' } = {}) {
             .catch(error => {
                 console.error('Error al obtener animes:', error);
                 showError(content, error, { page, genre, search }, showAnimes);
+            });
+    }
+}
+
+// Función para mostrar los animes en tops
+function showAnimesTops() {
+    const content = document.getElementById('content');
+
+    if (content) {
+        // Mostramos el estado de carga
+        showLoadingState(content);
+
+        fetchAnimes({ limit: 10 })
+            .then(data => {
+                if (data.data && data.data.length > 0) {
+                    content.innerHTML = ''; // Limpiamos el loading
+                    data.data.forEach((anime, i) => {
+                        let top = createTop('anime', anime);
+                        content.appendChild(top);
+                    });
+                } else {
+                    showError(content, '404', null, showAnimesTops);
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener animes:', error);
+                showError(content, error, null, showAnimesTops);
             });
     }
 }
@@ -102,6 +131,7 @@ function filterByAnimeGenre(currentCategory) {
                 const genreId = e.target.getAttribute('data-genre-id');
                 currentPage = 1;
                 currentGenre = genreId;
+                resetSelectorToCatalog();
                 showAnimes({ page: currentPage, genre: currentGenre, search: '' });
 
                 genre.querySelectorAll('.btn-genres').forEach(btn => {
@@ -131,6 +161,7 @@ function filterByAnimeSearch() {
                 document.querySelectorAll('.btn-genres').forEach(btn => {
                     btn.classList.remove('active');
                 });
+                resetSelectorToCatalog();
                 showAnimes({ page: currentPage, genre: currentGenre, search: searchTerm });
             }
         }, 500);
@@ -143,4 +174,4 @@ function filterByAnimeSearch() {
     }
 }
 
-export { showAnimes, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch };
+export { showAnimes, showAnimesTops, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch };

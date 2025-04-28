@@ -1,9 +1,10 @@
-export function fetchMangas({ page = 1, genre = '', search = '' } = {}) {
+export function fetchMangas({ page = 1, genre = '', search = '', limit = '' } = {}) {
     return new Promise((resolve, reject) => {
         // Establecemos la url de la API con los parametros de la petición
         let url = `http://localhost:8080/GAM/FetchMangas?page=${page}`;
         if (genre) url += `&genre=${encodeURIComponent(genre)}`;
         if (search) url += `&search=${encodeURIComponent(search)}`;
+        if (limit) url += `&limit=${encodeURIComponent(limit)}`;
 
         // Conectamos con el backend
         const http = new XMLHttpRequest();
