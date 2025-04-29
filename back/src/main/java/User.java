@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String password;
     private String authToken;
-    private ArrayList<Content> library;
+    private ArrayList<SavedContent> library;
     private ArrayList<User> following;
 
     private static int counter;
@@ -200,7 +200,7 @@ public class User {
         this.password = password;
     }
 
-    public ArrayList<Content> getLibrary() {
+    public ArrayList<SavedContent> getLibrary() {
         return this.library;
     }
 
