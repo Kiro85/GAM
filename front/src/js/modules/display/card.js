@@ -6,7 +6,7 @@ export function createCard(contentType, content) {
     card.classList.add('card');
 
     const template = `
-        <section class="card__content">
+        <section class="card__content" data-content-type="${contentType}" data-content-id="${content.mal_id}">
             <section class="card__back">
                 <section class="card__back-content">
                     <img class="card__back-img" 
