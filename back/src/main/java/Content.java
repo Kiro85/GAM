@@ -8,17 +8,23 @@ public class Content {
     private ArrayList<Comment> comments;
 
     private static int counter;
-    
+
     // Constructors
     public Content(int externalId, String contentType) {
         this.setId(this.getCounter());
         this.setExternalId(externalId);
         this.setContentType(contentType);
-        
+
         this.setCounter();
     }
 
     // Methods
+    public static int createContent(int contentId, String contentType) {
+		Content content = new Content(contentId, contentType);
+		Main.contents.add(content);
+
+        return content.getId(); // Devolvemos el id del contenido
+	}
 
     // Getters & Setters
     public int getId() {

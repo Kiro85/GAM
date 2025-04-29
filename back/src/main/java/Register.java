@@ -1,5 +1,4 @@
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,33 +13,37 @@ import java.util.UUID;
 @WebServlet("/Register")
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Register() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public Register() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// actualizamos la lista de usuarios
 		try {
 			Main.updateUsers();
 		} catch (Exception e) {
 			System.out.println("Error al actualizar la lista de usuarios: " + e.getMessage());
 		}
-				
+
 		// Obtenemos credenciales
 		String username = null;
 		String password = null;
@@ -52,30 +55,30 @@ public class Register extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println("Error al obtener credenciales: " + e.getMessage());
 		}
-		
+
 		// Comprobamos que la contraseña nueva coincida con la repetición de la misma
 		boolean correctPassword = false;
 		if (password.equals(repeatPassword)) {
 			correctPassword = true;
 		}
-		
+
 		// Comprobamos que el usuario no exista
 		boolean exists = false;
 		try {
 			exists = Main.searchIfUserExists(username);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Error al comprobar existencia de usuario: " + e.getMessage());
 		}
-		
+
 		// Si no existe, creamos el usuario
 		boolean error = false;
 		if (!exists) {
 			error = User.createUser(username, password, Main.getUsers());
 		}
-		
+
 		// Devolvemos la respuesta
 		try {
-			if (!correctPassword){
+			if (!correctPassword) {
 				response.getWriter().append("Las constraseñas introducidas no coinciden.");
 			} else if (exists) {
 				response.getWriter().append("El usuario ya existe");
@@ -87,9 +90,6 @@ public class Register extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println("Error al enviar respuesta: " + e.getMessage());
 		}
-		
-		// Testing
-		Main.showUsers();
 	}
 
 }

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 public class Main {
 	// Attributes
-	private static ArrayList<User> users;
+	public static ArrayList<User> users;
+	public static ArrayList<Content> contents;
 
 	// Methods
 	public static void showUsers() {
@@ -19,11 +20,11 @@ public class Main {
 			System.out.println("--------------------------------");
 		}
 	}
-	
+
 	public static int searchUser(String username) {
 		boolean found = false;
 		int i = 0;
-		
+
 		try {
 			while (!found && i < getUsers().size()) {
 				if (getUsers().get(i).getUsername().equals(username)) {
@@ -31,15 +32,15 @@ public class Main {
 				} else {
 					i++;
 				}
-			}	
+			}
 		} catch (Exception e) {
 			System.out.println("Error al buscar el usuario: " + e.getMessage());
 		}
-		
+
 		return i;
 	}
 
- 	public static void updateUsers() {
+	public static void updateUsers() {
 		// Vaciamos la lista actual
 		users = new ArrayList<User>();
 
@@ -149,17 +150,17 @@ public class Main {
 		// Devolvemos el resultado
 		return result;
 	}
-	
+
 	public static void assingTokenToUser(String username, String authToken) {
 		int user = searchUser(username);
-		
+
 		getUsers().get(user).setAuthToken(authToken);
 	}
-	
+
 	public static int searchUserByToken(String authToken) {
 		boolean found = false;
 		int i = 0;
-		
+
 		while (!found && i < getUsers().size()) {
 			if (getUsers().get(i).getAuthToken().equals(authToken)) {
 				found = true;
@@ -167,10 +168,10 @@ public class Main {
 				i++;
 			}
 		}
-		
+
 		return i;
 	}
-	
+
 	public static boolean authUser(String username, String password) {
 		boolean found = false;
 
@@ -178,7 +179,8 @@ public class Main {
 		try {
 			int i = 0;
 			do {
-				if (getUsers().get(i).getUsername().equals(username) && Main.getUsers().get(i).getPassword().equals(password)) {
+				if (getUsers().get(i).getUsername().equals(username)
+						&& Main.getUsers().get(i).getPassword().equals(password)) {
 					found = true;
 				} else {
 					i++;
@@ -190,7 +192,7 @@ public class Main {
 
 		return found;
 	}
-	
+
 	public static boolean searchIfUserExists(String username) {
 		boolean found = false;
 
@@ -211,8 +213,28 @@ public class Main {
 		return found;
 	}
 
+	public static int searchContent(int externalId, String contentType, ArrayList<Content> contents) {
+
+		int i = -1;
+		boolean found = false;
+
+		while (!found && i < getContents().size()) {
+			if (contents.get(i).getContentType().equals(contentType) && contents.get(i).getExternalId() == externalId) {
+				found = true;
+			} else {
+				i++;
+			}
+		}
+
+		return i;
+	}
+
 	// Getters & Setters
 	public static ArrayList<User> getUsers() {
 		return users;
+	}
+
+	public static ArrayList<Content> getContents() {
+		return contents;
 	}
 }
