@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Main {
 	// Attributes
 	public static ArrayList<User> users;
-	public static ArrayList<Content> contents;
+	public static ArrayList<Content> contents = new ArrayList<Content>();
 
 	// Methods
 	public static void showUsers() {
@@ -59,6 +59,7 @@ public class Main {
 		String id = "";
 		String username = "";
 		String password = "";
+		String authToken = "";
 		try {
 			for (int i = 0; i < usersDB.length(); i++) {
 				if (usersDB.charAt(i) == ',') {
@@ -72,6 +73,9 @@ public class Main {
 					// si la id no esta vacia, creamos el usuario y lo añadimos a la lista
 					if (!id.isEmpty()) {
 						User user = new User(Integer.parseInt(id), username, password);
+						if (!authToken.isEmpty()) {
+							user.setAuthToken(authToken);
+						}
 						users.add(user);
 					}
 
@@ -79,6 +83,7 @@ public class Main {
 					id = "";
 					username = "";
 					password = "";
+					authToken = "";
 
 				} else {
 					// dependiendo de la posición, añadimos la información en lugares diferentes
@@ -88,6 +93,8 @@ public class Main {
 						username += usersDB.charAt(i);
 					} else if (position == 2) {
 						password += usersDB.charAt(i);
+					} else if (position == 3) {
+						authToken += usersDB.charAt(i);
 					}
 				}
 			}
@@ -128,12 +135,12 @@ public class Main {
 
 		// Ejecutamos la query
 		try {
-			String query = "SELECT * FROM users";
+			String query = "SELECT id, username, password, auth_token FROM users";
 			ResultSet rs = mStm.executeQuery(query);
 
 			while (rs.next()) {
 				result = result + rs.getInt("id") + "," + rs.getString("username") + "," + rs.getString("password")
-						+ "<br>";
+						+ "," + (rs.getString("auth_token") != null ? rs.getString("auth_token") : "") + "<br>";
 			}
 		} catch (SQLException error) {
 			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + error.getMessage());
@@ -155,6 +162,50 @@ public class Main {
 		int user = searchUser(username);
 
 		getUsers().get(user).setAuthToken(authToken);
+		updateTokenToDB(username, authToken);
+	}
+
+	public static void updateTokenToDB(String username, String authToken) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "UPDATE users SET auth_token = '" + authToken + "' WHERE username = '" + username + "'";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
 	}
 
 	public static int searchUserByToken(String authToken) {
@@ -167,6 +218,10 @@ public class Main {
 			} else {
 				i++;
 			}
+		}
+
+		if (!found) {
+			i = -1;
 		}
 
 		return i;
@@ -218,15 +273,29 @@ public class Main {
 		int i = -1;
 		boolean found = false;
 
-		while (!found && i < getContents().size()) {
-			if (contents.get(i).getContentType().equals(contentType) && contents.get(i).getExternalId() == externalId) {
-				found = true;
-			} else {
-				i++;
+		if (contents != null) {
+			while (!found && i < getContents().size()) {
+				if (contents.get(i).getContentType().equals(contentType)
+						&& contents.get(i).getExternalId() == externalId) {
+					found = true;
+				} else {
+					i++;
+				}
 			}
 		}
 
 		return i;
+	}
+
+	public static void updateContents() {
+		contents = new ArrayList<Content>();
+
+		String contentsDB = "";
+		try {
+			contentsDB = getContentsFromDB();
+		} catch (Exception error) {
+			System.out.println("Error al obtener los contenidos de la base de datos: " + error.getMessage());
+		}
 	}
 
 	// Getters & Setters

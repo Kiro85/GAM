@@ -25,6 +25,10 @@ export async function showModal(contentType, content) {
             document.body.style.overflow = "hidden";
 
             if (content && contentType === 'anime') {
+                // Agregamos datasets al modal
+                modal.dataset.contentType = contentType;
+                modal.dataset.contentId = content.mal_id;
+
                 // Actualizamos el contenido del modal para anime
                 modalTitle.textContent = content.title_english || content.title;
                 modalDetails.innerHTML = `

@@ -9,6 +9,7 @@ function saveContent(externalId, contentType, rating, position) {
         };
 
         http.open("POST", "http://localhost:8080/GAM/SaveContent", true);
+        http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&externalId=" + externalId + "&contentType=" + contentType + "&rating=" + rating + "&position=" + position);
 
     } catch (error) {
@@ -20,11 +21,15 @@ function addToCollection() {
     const saveBtn = document.getElementById("addToCollection");
 
     saveBtn.addEventListener("click", () => {
-        let card = saveBtn.closest(".card__content");
-        let contentType = card.dataset.contentType;
-        let contentId = card.dataset.contentId;
+        let modal = saveBtn.closest(".modal");
+        let contentType = modal.dataset.contentType;
+        let contentId = modal.dataset.contentId;
         let rating = document.getElementById("rating").value;
         let position = document.getElementById("topSelect").value;
+
+        if (position == "") {
+            position = 0;
+        }
 
         saveContent(contentId, contentType, rating, position);
     });

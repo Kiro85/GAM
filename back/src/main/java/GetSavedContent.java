@@ -26,29 +26,31 @@ public class GetSavedContent extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtenemos los parametros
         try {
+        	// Obtenemos los parametros
             String userToken = request.getParameter("userToken");
             String contentType = request.getParameter("contentType");
 
             // Actualizamos la lista de usuarios
             Main.updateUsers();
-            System.out.println("----");
-            Main.showUsers();
-            System.out.println(Main.getUsers().get(0).getAuthToken());
 
             // Buscamos el usuario
             int userPosition = Main.searchUserByToken(userToken);
 
-            // obtenemos el contenido guardado en su biblioteca
-            String content = Main.getUsers().get(userPosition).getSavedContent(contentType);
-
-            // devolvemos el contenido
-            if (!content.equals("null")) {
-                response.getWriter().append(content);
+            if (userPosition != -1) {
+            	// obtenemos el contenido guardado en su biblioteca
+            	String content = Main.getUsers().get(userPosition-1).getSavedContent(contentType);
+            	
+            	// devolvemos el contenido
+            	if (!content.equals("null")) {
+            		response.getWriter().append(content);
+            	} else {
+            		response.getWriter().append("No hay contenido guardado");
+            	}            	
             } else {
-                response.getWriter().append("No hay contenido guardado");
+            	response.getWriter().append("No se ha encontrado al usuario");
             }
+            
         } catch (Exception e) {
             System.out.println("Error al obtener el contenido guardado: " + e.getMessage());
             response.getWriter().append("Error: " + e.getMessage());
