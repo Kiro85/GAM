@@ -35,46 +35,77 @@ public class SaveContent extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String userToken = "";
+		int externalId = 0;
+		String contentType = "";
+		int rating = 0;
+		int position = 0;
+
+		// Obtenemos los parametros
 		try {
-			// Obtenemos los parametros
-			String userToken = request.getParameter("userToken");
-			int externalId = Integer.parseInt(request.getParameter("externalId"));
-			String contentType = request.getParameter("contentType");
-			int rating = Integer.parseInt(request.getParameter("rating"));
-			int position = Integer.parseInt(request.getParameter("position"));
-
-			// Actualizamos la lista de usuarios
-			Main.updateUsers();
-
-			// Buscamos el usuario
-			int userPosition = Main.searchUserByToken(userToken);
-
-			if (userPosition != -1) {
-				// Buscamos el contenido, si no existe, lo creamos
-				int contentPosition;
-				contentPosition = Main.searchContent(externalId, contentType, Main.getContents());
-				System.out.println("2");
-
-				if (contentPosition == -1) {
-					contentPosition = Content.createContent(externalId, contentType);
-				}
-				System.out.println("2");
-
-				// Añadimos el contenido a la biblioteca del usuario y a la base de datos
-				Main.getUsers().get(userPosition).addContentToLibrary(Main.getContents().get(contentPosition), rating,
-						position);
-				System.out.println("2");
-
-				// Devolvemos la respuesta
-				response.getWriter().append("Contenido añadido a la colección");
-
-			} else {
-				response.getWriter().append("No se ha encontrado al usuario");
-			}
+			userToken = request.getParameter("userToken");
+			externalId = Integer.parseInt(request.getParameter("externalId"));
+			contentType = request.getParameter("contentType");
+			rating = Integer.parseInt(request.getParameter("rating"));
+			position = Integer.parseInt(request.getParameter("position"));
 
 		} catch (Exception e) {
-			System.out.println("Error al guardar el contenido: " + e.getMessage());
+			System.out.println("Error al obtener los parametros para guardar el contenido: " + e.getMessage());
+		}
+
+		// Actualizamos la lista de usuarios
+		try {
+			Main.updateUsers();
+		} catch (Exception e) {
+			System.out.println("Error al actualizar la lista de usuarios: " + e.getMessage());
+		}
+
+		// Buscamos el usuario
+		int userPosition = -1;
+		try {
+			userPosition = Main.searchUserByToken(userToken);
+		} catch (Exception e) {
+			System.out.println("Error al buscar el usuario: " + e.getMessage());
+		}
+
+		// Buscamos el contenido, si no existe, lo creamos
+		if (userPosition != -1) {
+			int contentPosition = -1;
+			try {	
+				contentPosition = Main.searchContent(externalId, contentType, Main.getContents());
+			} catch (Exception e) {
+				System.out.println("Error al buscar el contenido: " + e.getMessage());
+			}
+
+			// Si el contenido no existe, lo creamos
+			if (contentPosition == -1) {
+				try {
+					contentPosition = Content.createContent(externalId, contentType);
+				} catch (Exception e) {
+					System.out.println("Error al crear el contenido: " + e.getMessage());
+				}
+			}
+
+			// Añadimos el contenido a la biblioteca del usuario y a la base de datos
+			try {	
+				Main.getUsers().get(userPosition).addContentToLibrary(Main.getContents().get(contentPosition), rating, position);
+			} catch (Exception e) {
+				System.out.println("Error al añadir el contenido a la biblioteca del usuario: " + e.getMessage());
+			}
+
+			// Devolvemos la respuesta
+			try {
+				response.getWriter().append("Contenido añadido a la colección");
+			} catch (Exception e) {
+				System.out.println("Error al devolver la respuesta de contenido añadido: " + e.getMessage());
+			}
+
+		} else {
+			try {
+				response.getWriter().append("No se ha encontrado al usuario");
+			} catch (Exception e) {
+				System.out.println("Error al devolver la respuesta de usuario no encontrado	: " + e.getMessage());
+			}
 		}
 	}
-
 }

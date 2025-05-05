@@ -11,8 +11,8 @@ public class User {
 	private String username;
 	private String password;
 	private String authToken;
-	private ArrayList<SavedContent> library;
-	private ArrayList<User> following;
+	private ArrayList<SavedContent> library = new ArrayList<SavedContent>();
+	private ArrayList<User> following = new ArrayList<User>();
 
 	private static int counter;
 
@@ -30,7 +30,7 @@ public class User {
 		this.setUsername(userName);
 		this.setPassword(password);
 	}
-
+	
 	// Methods
 	public static boolean createUser(String username, String password, ArrayList<User> users) {
 		boolean error = false;

@@ -270,7 +270,7 @@ public class Main {
 
 	public static int searchContent(int externalId, String contentType, ArrayList<Content> contents) {
 
-		int i = -1;
+		int i = 0;
 		boolean found = false;
 
 		if (contents != null) {
@@ -282,6 +282,10 @@ public class Main {
 					i++;
 				}
 			}
+		}
+
+		if (!found) {
+			i = -1;
 		}
 
 		return i;
