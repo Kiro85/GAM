@@ -22,13 +22,15 @@ export async function showUserProfile(userId, username) {
                 mangas: []
             };
 
-            // Obtener los datos completos de la API para animes y mangas
-            const [animeData, mangaData] = await Promise.all([
-                getFriendAnimes(animes),
-                getFriendMangas(mangas)
-            ]);
-
+            // Primero obtenemos los animes
+            const animeData = await getFriendAnimes(animes);
             user.animes = animeData;
+
+            // Esperamos 1.5 segundos
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Luego obtenemos los mangas
+            const mangaData = await getFriendMangas(mangas);
             user.mangas = mangaData;
 
             container.innerHTML = createUserProfile(user);

@@ -3,10 +3,13 @@ function createUserProfile(user) {
     return `
         <div class="user-profile">
             <div class="user-profile__header">
-                <img class="user-profile__banner" src="${user.banner || 'https://cms.rhinoshield.app/public/images/ip_page_frieren_banner_mobile_cd2937b1b4.jpg'}" alt="Banner de ${user.username}">
+                <img class="user-profile__banner" 
+                    src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=banner_image&t=${new Date().getTime()}" 
+                    alt="Banner de ${user.username}">
                 <div class="user-profile__profile">
                     <div class="user-profile__avatar">
-                        <img src="${user.avatar || 'https://i.pinimg.com/736x/73/a6/71/73a671ed0f6a83009fbd75bec75620b7.jpg'}" alt="Avatar de ${user.username}">
+                        <img src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
+                            alt="Avatar de ${user.username}">
                     </div>
                     <h2 class="user-profile__username">${user.username}</h2>
                 </div>

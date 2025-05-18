@@ -13,6 +13,7 @@ function login() {
 
                 if (this.responseText != "!found") {
                     localStorage.setItem('authToken', token); // lo guardamos en el localStorage
+                    localStorage.setItem('username', username); // guardamos el nombre de usuario
                     console.log('Inicio de sesión exitoso. Token guardado:', token);
                     window.location.href = "http://localhost:5173/index.html";
                 } else {
@@ -31,7 +32,7 @@ function login() {
 }
 
 // Función para el registro
-function register() { 
+function register() {
     let username = document.querySelector('[data-action="register-username"]').value;
     let password = document.querySelector('[data-action="register-password"]').value;
     let repeatPassword = document.querySelector('[data-action="register-repeat-password"]').value;
@@ -89,6 +90,7 @@ function logout() {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 localStorage.removeItem('authToken');
+                localStorage.removeItem('username'); // Eliminamos el nombre de usuario
                 window.location.href = "http://localhost:5173/pages/login.html";
             });
         }

@@ -47,7 +47,9 @@ function displaySearchResults(users, container) {
 
     container.innerHTML = userObjects.map(user => `
         <article class="friend-card">
-            <img class="friend-card__avatar" src="${user.avatar || 'https://i.pinimg.com/736x/73/a6/71/73a671ed0f6a83009fbd75bec75620b7.jpg'}" alt="Avatar">
+            <img class="friend-card__avatar" 
+                src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
+                alt="Avatar">
             <section class="friend-card__info">
                 <h3 class="friend-card__name">${user.username}</h3>
                 <section class="friend-card__actions">

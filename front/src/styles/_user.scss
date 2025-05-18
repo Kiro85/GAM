@@ -8,16 +8,60 @@
     box-shadow: 0 4px 20px rgba(vars.$main-color, 0.4);
 
     &__banner {
-        width: 100%;
+        position: relative;
+        width: 100vw;
         height: 100%;
+    }
+
+    &__banner-img {
         object-fit: cover;
         filter: brightness(0.6);
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        height: 100%;
 
         &:hover {
             transform: scale(1.05);
             filter: brightness(0.7);
         }
+    }
+
+    &__banner-upload {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(vars.$main-color, 0.8);
+        border: 2px solid rgba(vars.$text-color, 0.2);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+
+        i {
+            color: vars.$text-color;
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        &:hover {
+            background: rgba(vars.$second-color, 0.8);
+            border-color: vars.$second-color;
+            transform: scale(1.1);
+
+            i {
+                color: vars.$text-color;
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    &__banner-input {
+        display: none;
     }
 
     &__info {
@@ -63,6 +107,11 @@
             &::before {
                 transform: translateX(100%);
             }
+
+            .profile__logo-upload {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         &-img {
@@ -74,6 +123,41 @@
             &:hover {
                 transform: scale(1.1);
             }
+        }
+
+        &-upload {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(vars.$main-color, 0.9), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            i {
+                color: vars.$text-color;
+                font-size: 1.5rem;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            &:hover {
+                background: linear-gradient(to top, rgba(vars.$second-color, 0.9), transparent);
+
+                i {
+                    color: vars.$text-color;
+                    transform: scale(1.1);
+                }
+            }
+        }
+
+        &-input {
+            display: none;
         }
     }
 
@@ -169,7 +253,6 @@
             transform: scale(1.1) rotate(5deg);
             color: vars.$second-color;
         }
-
     }
 
     &__option-text {

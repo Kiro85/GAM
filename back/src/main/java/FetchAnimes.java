@@ -124,8 +124,10 @@ public class FetchAnimes extends HttpServlet {
 			} catch (Exception e) {
 				retryCount++;
 				if (retryCount >= maxRetries) {
-					response.getWriter().append("Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
-					System.out.println("Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
+					response.getWriter().append(
+							"Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
+					System.out.println(
+							"Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
 				}
 			}
 		}

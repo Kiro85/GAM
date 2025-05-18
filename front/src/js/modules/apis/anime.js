@@ -77,25 +77,51 @@ async function showUserAnimeTops() {
             if (savedContent) {
                 content.innerHTML = '';
 
-                // Convertimos la cadena de IDs en un array y filtramos valores vacíos
-                const animeIds = savedContent.split(',').filter(id => id.trim());
+                // Convertimos la cadena en un array de objetos con id y rating
+                const contentItems = savedContent.split('\n')
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const match = line.match(/Content: (\d+) Rating: ([\d.]+)/);
+                        if (match) {
+                            return {
+                                id: match[1],
+                                rating: parseFloat(match[2])
+                            };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+
                 const loadedAnimes = [];
 
                 // Cargamos todos los animes primero
-                for (const animeId of animeIds) {
+                for (const item of contentItems) {
                     try {
-                        const response = await fetchAnimes({ id: animeId.trim() });
-                        if (response.data) {
+                        console.log('Intentando cargar anime:', item.id);
+                        const response = await fetchAnimes({ id: item.id });
+
+                        if (response && response.data) {
                             // Obtenemos la posición del anime en la base de datos
-                            const position = await getAnimePosition(animeId.trim());
+                            const position = await getAnimePosition(item.id);
                             response.data.position = position;
+                            response.data.rating = item.rating;
                             loadedAnimes.push(response.data);
+                            console.log('Anime cargado exitosamente:', item.id);
+                        } else {
+                            console.error('Respuesta inválida para el anime:', item.id, response);
                         }
+
+                        // Esperamos 1.5 segundos entre cada petición
                         await new Promise(resolve => setTimeout(resolve, 1500));
                     } catch (error) {
-                        console.error(`Error al obtener anime ${animeId}:`, error);
+                        console.error(`Error al obtener anime ${item.id}:`, error);
                         continue;
                     }
+                }
+
+                if (loadedAnimes.length === 0) {
+                    content.innerHTML = '<p>No se pudieron cargar los animes</p>';
+                    return;
                 }
 
                 // Ordenamos por posición, poniendo los que no tienen posición (0) al final
@@ -113,10 +139,16 @@ async function showUserAnimeTops() {
                         let top = createTop('anime', anime);
                         content.appendChild(top);
                     });
+            } else {
+                content.innerHTML = '<p>No hay animes guardados</p>';
             }
         } catch (error) {
             console.error('Error al mostrar tops de anime:', error);
-            showError(content, error, null, showUserAnimeTops);
+            content.innerHTML = `
+                <div class="error-message">
+                    <p>Error al cargar los animes</p>
+                    <p>Por favor, inténtalo de nuevo más tarde</p>
+                </div>`;
         }
     }
 }

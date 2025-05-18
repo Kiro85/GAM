@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.util.Date;
 
 public class Main {
 	// Attributes
@@ -352,16 +355,21 @@ public class Main {
 
 		// Ejecutamos la query
 		try {
-			String query = "SELECT user_id, comment, commented_at FROM comments WHERE external_id = '" + externalId
-					+ "' ORDER BY commented_at DESC";
+			String query = "SELECT c.user_id, c.comment, c.commented_at, u.username FROM comments c JOIN users u ON c.user_id = u.id WHERE c.external_id = '"
+					+ externalId
+					+ "' ORDER BY c.commented_at DESC";
 			ResultSet rs = mStm.executeQuery(query);
 
 			while (rs.next()) {
+				int userId = rs.getInt("user_id");
 				comments = comments +
 						"<div class='modal__comment'>" +
-						"<i class='modal__comment-icon bi bi-person-circle'></i>" +
+						"<svg class='modal__comment-avatar' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-user'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>" +
+						"<div class='modal__comment-content'>" +
+						"<p class='modal__comment-username'>" + rs.getString("username") + "</p>" +
 						"<p class='modal__comment-text'>" + rs.getString("comment") + "</p>" +
 						"<p class='modal__comment-date'>" + rs.getString("commented_at") + "</p>" +
+						"</div>" +
 						"</div>";
 			}
 		} catch (SQLException e) {
@@ -397,6 +405,109 @@ public class Main {
 		}
 
 		return found;
+	}
+
+	public static boolean saveImageToDB(int userId, String imageType, InputStream imageStream) {
+		boolean success = false;
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		PreparedStatement pStm = null;
+		try {
+			// Preparar la query con PreparedStatement
+			String query = "UPDATE users SET " + imageType + " = ? WHERE id = ?";
+			pStm = conBD.prepareStatement(query);
+
+			// Establecer los parámetros
+			pStm.setBinaryStream(1, imageStream);
+			pStm.setInt(2, userId);
+
+			// Ejecutar la query
+			pStm.executeUpdate();
+
+			success = true; // Si se ejecuta correctamente, devolvemos true
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			pStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		return success;
+	}
+
+	public static byte[] getImageFromDB(int userId, String imageType) {
+		byte[] imageData = null;
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "SELECT " + imageType + " FROM users WHERE id = '" + userId + "'";
+			ResultSet rs = mStm.executeQuery(query);
+
+			while (rs.next()) {
+				imageData = rs.getBytes(imageType);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		return imageData;
 	}
 
 	// Getters & Setters

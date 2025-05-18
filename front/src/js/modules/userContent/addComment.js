@@ -29,7 +29,11 @@ function addComment() {
             let contentId = modal.dataset.contentId;
             let commentText = document.getElementById("commentText").value;
 
-            addCommentToDB(commentText, contentId);
+            if (commentText.length > 0) {
+                addCommentToDB(commentText, contentId);
+            } else {
+                alert("El comentario no puede estar vacío");
+            }
         });
     }
 }

@@ -63,8 +63,12 @@ public class AddComment extends HttpServlet {
         if (userPosition != -1) {
             try {
                 // Añadimos el comentario
-                Main.addComment(Main.getUsers().get(userPosition).getId(), comment, contentId);
-                response.getWriter().append("Comentario añadido!");
+                if (comment != null && comment.trim().length() > 0) {
+                    Main.addComment(Main.getUsers().get(userPosition).getId(), comment, contentId);
+                    response.getWriter().append("Comentario añadido!");
+                } else {
+                    response.getWriter().append("Comentario no válido");
+                }
 				
             } catch (Exception e) {
                 System.out.println("Error al añadir el comentario: " + e.getMessage());
