@@ -26,34 +26,58 @@ public class GetSavedContent extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // Obtenemos los parametros
+        String userToken = request.getParameter("userToken");
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        String contentType = request.getParameter("contentType");
+
+        // Actualizamos la lista de usuarios
         try {
-        	// Obtenemos los parametros
-            String userToken = request.getParameter("userToken");
-            String contentType = request.getParameter("contentType");
-
-            // Actualizamos la lista de usuarios
             Main.updateUsers();
-
-            // Buscamos el usuario
-            int userPosition = Main.searchUserByToken(userToken);
-
-            if (userPosition != -1) {
-            	// obtenemos el contenido guardado en su biblioteca
-            	String content = Main.getUsers().get(userPosition-1).getSavedContent(contentType);
-            	
-            	// devolvemos el contenido
-            	if (!content.equals("null")) {
-            		response.getWriter().append(content);
-            	} else {
-            		response.getWriter().append("No hay contenido guardado");
-            	}            	
-            } else {
-            	response.getWriter().append("No se ha encontrado al usuario");
-            }
-            
         } catch (Exception e) {
-            System.out.println("Error al obtener el contenido guardado: " + e.getMessage());
-            response.getWriter().append("Error: " + e.getMessage());
+            System.out.println("Error al actualizar la lista de usuarios: " + e.getMessage());
+        }
+
+        // Buscamos el usuario
+        int userPosition = -1;
+        try {
+            if (userId == -1) {
+                userPosition = Main.searchUserByToken(userToken);
+            } else {
+                userPosition = Main.searchUserById(userId);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al buscar el usuario: " + e.getMessage());
+        }
+        
+        if (userPosition != -1) {
+            // obtenemos el contenido guardado de la base de datos
+            String content = "";
+            try {
+                content = Main.getUsers().get(userPosition).getSavedContentFromDB(Main.getUsers().get(userPosition).getId(), contentType);
+            } catch (Exception e) {
+                System.out.println("Error al obtener el contenido guardado: " + e.getMessage());
+            }
+
+            try {
+                // devolvemos el contenido
+                if (!content.equals("null")) {
+                    response.getWriter().append(content);
+                } else {
+                    response.getWriter().append("No hay contenido guardado");
+                }
+            } catch (Exception e) {
+                System.out.println("Error al devolver el contenido: " + e.getMessage());
+            }
+
+        } else {
+            try {
+                response.getWriter().append("No se ha encontrado al usuario");
+            } catch (Exception e) {
+                System.out.println("Error al devolver la respuesta de usuario no encontrado: " + e.getMessage());
+            }
         }
     }
 

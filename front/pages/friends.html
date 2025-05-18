@@ -25,90 +25,26 @@
             </ul>
 
             <section class="nav__logout">
-                <button id="logoutButton" class="nav__logout-button"> <i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-              </section>
-              
+                <button id="logoutButton" class="nav__logout-button"> <i class="fas fa-sign-out-alt"></i> Cerrar
+                    Sesión</button>
+            </section>
+
             <section class="nav__profile">
-                <a class="nav__profile-link" href="./user.html"><i class="bi bi-person-circle nav__icon-profile"></i></a>
+                <a class="nav__profile-link" href="./user.html"><i
+                        class="bi bi-person-circle nav__icon-profile"></i></a>
             </section>
         </nav>
     </header>
 
     <main class="home--friends">
         <header class="main__search">
-            <section class="search">
+            <section class="search" id="search">
                 <i class="search__icon bi bi-search"></i>
                 <input class="search__input" type="search" placeholder="Buscar...">
             </section>
         </header>
 
-        <main class="friends">
-            <article class="friend-card">
-                <img class="friend-card__avatar"
-                    src="https://i.pinimg.com/736x/73/a6/71/73a671ed0f6a83009fbd75bec75620b7.jpg" alt="Avatar">
-                <section class="friend-card__info">
-                    <h3 class="friend-card__name">Stark</h3>
-                    <section class="friend-card__actions">
-                        <button class="friend-card__btn friend-card__btn--message" title="Enviar mensaje">
-                            <i class="bi bi-chat-dots"></i>
-                        </button>
-                        <button class="friend-card__btn friend-card__btn--remove" title="Eliminar amigo">
-                            <i class="bi bi-person-x"></i>
-                        </button>
-                    </section>
-                </section>
-            </article>
-
-            <article class="friend-card">
-                <img class="friend-card__avatar"
-                    src="https://preview.redd.it/vzeba2o65cxc1.jpeg?width=640&crop=smart&auto=webp&s=78403ac65bc875a6e0547935dc23bc2ed2472d73"
-                    alt="Avatar">
-                <section class="friend-card__info">
-                    <h3 class="friend-card__name">Fern</h3>
-                    <section class="friend-card__actions">
-                        <button class="friend-card__btn friend-card__btn--message" title="Enviar mensaje">
-                            <i class="bi bi-chat-dots"></i>
-                        </button>
-                        <button class="friend-card__btn friend-card__btn--remove" title="Eliminar amigo">
-                            <i class="bi bi-person-x"></i>
-                        </button>
-                    </section>
-                </section>
-            </article>
-
-            <article class="friend-card">
-                <img class="friend-card__avatar"
-                    src="https://preview.redd.it/vzeba2o65cxc1.jpeg?width=640&crop=smart&auto=webp&s=78403ac65bc875a6e0547935dc23bc2ed2472d73"
-                    alt="Avatar">
-                <section class="friend-card__info">
-                    <h3 class="friend-card__name">Fern</h3>
-                    <section class="friend-card__actions">
-                        <button class="friend-card__btn friend-card__btn--message" title="Enviar mensaje">
-                            <i class="bi bi-chat-dots"></i>
-                        </button>
-                        <button class="friend-card__btn friend-card__btn--remove" title="Eliminar amigo">
-                            <i class="bi bi-person-x"></i>
-                        </button>
-                    </section>
-                </section>
-            </article>
-
-            <article class="friend-card">
-                <img class="friend-card__avatar"
-                    src="https://preview.redd.it/vzeba2o65cxc1.jpeg?width=640&crop=smart&auto=webp&s=78403ac65bc875a6e0547935dc23bc2ed2472d73"
-                    alt="Avatar">
-                <section class="friend-card__info">
-                    <h3 class="friend-card__name">Fern</h3>
-                    <section class="friend-card__actions">
-                        <button class="friend-card__btn friend-card__btn--message" title="Enviar mensaje">
-                            <i class="bi bi-chat-dots"></i>
-                        </button>
-                        <button class="friend-card__btn friend-card__btn--remove" title="Eliminar amigo">
-                            <i class="bi bi-person-x"></i>
-                        </button>
-                    </section>
-                </section>
-            </article>
+        <main class="friends" id="friends-container">
         </main>
     </main>
 </body>

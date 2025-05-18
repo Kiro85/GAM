@@ -4,6 +4,8 @@ import { createCard } from '../display/card';
 import { createTop } from '../display/tops';
 import { debounce, showError, showLoadingState } from './apiControl';
 import { resetSelectorToCatalog } from './initContent';
+import { getSavedMangas } from '../userContent/getUserContent';
+import { getMangaPosition } from '../userContent/getUserContent';
 
 // Variables para mantener el estado
 let currentPage = 1;
@@ -60,6 +62,170 @@ function showMangasTops() {
                 console.error('Error al obtener mangas:', error);
                 showError(content, error, null, showMangasTops);
             });
+    }
+}
+
+// Función para mostrar los tops del usuario
+async function showUserMangaTops() {
+    const content = document.getElementById('savedContent');
+
+    if (content) {
+        showLoadingState(content);
+
+        try {
+            const savedContent = await getSavedMangas();
+            if (savedContent) {
+                content.innerHTML = '';
+
+                // Convertimos la cadena de IDs en un array y filtramos valores vacíos
+                const mangaIds = savedContent.split(',').filter(id => id.trim());
+                const loadedMangas = [];
+
+                // Cargamos todos los mangas primero
+                for (const mangaId of mangaIds) {
+                    try {
+                        const response = await fetchMangas({ id: mangaId.trim() });
+                        if (response.data) {
+                            // Obtenemos la posición del manga en la base de datos
+                            const position = await getMangaPosition(mangaId.trim());
+                            response.data.position = position;
+                            loadedMangas.push(response.data);
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    } catch (error) {
+                        console.error(`Error al obtener manga ${mangaId}:`, error);
+                        continue;
+                    }
+                }
+
+                // Ordenamos por posición, poniendo los que no tienen posición (0) al final
+                loadedMangas
+                    .sort((a, b) => {
+                        // Si alguno tiene posición 0, lo ponemos al final
+                        if (a.position === 0) return 1;
+                        if (b.position === 0) return -1;
+                        // Si ambos tienen posición, ordenamos por posición
+                        return a.position - b.position;
+                    })
+                    .slice(0, 10)
+                    .forEach((manga) => {
+                        manga.rank = manga.position || 0; // Usamos la posición guardada o 0 si no tiene
+                        let top = createTop('manga', manga);
+                        content.appendChild(top);
+                    });
+            }
+        } catch (error) {
+            console.error('Error al mostrar tops de manga:', error);
+            showError(content, error, null, showUserMangaTops);
+        }
+    }
+}
+
+// Función para mostrar el contenido guardado
+async function showSavedMangas() {
+    const content = document.getElementById('savedContent');
+
+    if (content) {
+        // Mostramos el estado de carga
+        showLoadingState(content);
+
+        try {
+            // Obtenemos el contenido guardado
+            const savedContent = await getSavedMangas();
+
+            if (savedContent) {
+                // Convertimos la cadena en un array de objetos con id y rating
+                const contentItems = savedContent.split('\n')
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const match = line.match(/Content: (\d+) Rating: ([\d.]+)/);
+                        if (match) {
+                            return {
+                                id: match[1],
+                                rating: parseFloat(match[2])
+                            };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+
+                // Array para almacenar todos los mangas cargados
+                const loadedMangas = [];
+
+                // Cargamos todos los mangas primero
+                for (const item of contentItems) {
+                    try {
+                        const response = await fetchMangas({ id: item.id });
+                        if (response.data) {
+                            response.data.rating = item.rating;
+                            loadedMangas.push(response.data);
+                        }
+
+                        // Esperamos 1.5 segundos entre cada petición
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    } catch (error) {
+                        console.error(`Error al obtener manga ${item.id}:`, error);
+                        // Continuamos con el siguiente manga si hay error
+                        continue;
+                    }
+                }
+
+                // Una vez cargados todos, limpiamos el contenido y mostramos las tarjetas
+                content.innerHTML = '';
+
+                loadedMangas.forEach(manga => {
+                    let card = createCard('manga', manga, true);
+                    content.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Error al mostrar mangas guardados:', error);
+            showError(content, error, null, showSavedMangas);
+        }
+    }
+}
+
+// Función para obtener los mangas guardados de un usuario
+async function getFriendMangas(mangas) {
+    try {
+        if (!mangas) return [];
+
+        let mangaItems;
+
+        if (Array.isArray(mangas)) {
+            mangaItems = mangas.map(id => ({ id, rating: 0 }));
+        } else {
+            const strMangas = String(mangas);
+            mangaItems = strMangas.split('\n')
+                .map(line => {
+                    const match = line.match(/Content: (\d+) Rating: ([\d.]+)/);
+                    return match ? {
+                        id: match[1],
+                        rating: parseFloat(match[2])
+                    } : null;
+                })
+                .filter(item => item !== null);
+        }
+
+        const loadedMangas = [];
+
+        for (const item of mangaItems) {
+            try {
+                const response = await fetchMangas({ id: item.id.trim() });
+                if (response.data) {
+                    response.data.rating = item.rating;
+                    loadedMangas.push(response.data);
+                }
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return loadedMangas;
+    } catch (error) {
+        return [];
     }
 }
 
@@ -174,4 +340,4 @@ function filterByMangaSearch() {
     }
 }
 
-export { showMangas, showMangasTops, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch };
+export { showMangas, showMangasTops, showSavedMangas, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch, showUserMangaTops, getFriendMangas };

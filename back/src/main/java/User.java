@@ -11,18 +11,16 @@ public class User {
 	private String username;
 	private String password;
 	private String authToken;
-	private ArrayList<SavedContent> library = new ArrayList<SavedContent>();
 	private ArrayList<User> following = new ArrayList<User>();
 
 	private static int counter;
 
 	// Constructors
 	public User(String username, String password) {
-		this.setId(this.getCounter());
+		updateCounter(); // Actualizamos el contador antes de asignar el ID
+		this.setId(this.getCounter() + 1); // Incrementamos el contador en 1
 		this.setUsername(username);
 		this.setPassword(password);
-
-		this.setCounter();
 	}
 
 	public User(int id, String userName, String password) {
@@ -30,13 +28,12 @@ public class User {
 		this.setUsername(userName);
 		this.setPassword(password);
 	}
-	
+
 	// Methods
 	public static boolean createUser(String username, String password, ArrayList<User> users) {
 		boolean error = false;
 
 		try {
-
 			User user = new User(username, password);
 			users.add(user);
 
@@ -167,18 +164,7 @@ public class User {
 		return error;
 	}
 
-	public void addContentToLibrary(Content content, int rating, int position) {
-		try {
-			SavedContent savedContent = new SavedContent(content, rating, position);
-			this.library.add(savedContent);
-
-			addSavedContentToDB(savedContent);
-		} catch (Exception e) {
-			System.out.println("Error al añadir contenido a la biblioteca: " + e.getMessage());
-		}
-	}
-
-	private void addSavedContentToDB(SavedContent savedContent) {
+	public void addSavedContentToDB(int externalId, String contentType, double rating, int position) {
 		// Cargamos el driver
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -206,10 +192,9 @@ public class User {
 
 		// Ejecutamos la query
 		try {
-			String query = "INSERT INTO library (id, user_id, external_id, content_type, rating, position) VALUES ('"
-					+ savedContent.getId() + "', '" + this.getId() + "', '" + savedContent.getExternalId() + "', '"
-					+ savedContent.getContentType() + "', '" + savedContent.getRating() + "', '"
-					+ savedContent.getPosition() + "')";
+			String query = "INSERT INTO library (user_id, external_id, content_type, rating, position) VALUES ('"
+					+ this.getId() + "', '" + externalId + "', '" + contentType + "', '" + rating + "', '"
+					+ position + "')";
 			mStm.executeUpdate(query);
 		} catch (SQLException e) {
 			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
@@ -224,28 +209,390 @@ public class User {
 		}
 	}
 
-	public String getSavedContent(String contentType) {
-		String content = "";
+	public void removeSavedContentFromDB(int externalId, String contentType) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
 
-		for (int i = 0; i < this.getLibrary().size(); i++) {
-			if (this.getLibrary().get(i).getContentType().equals(contentType)) {
-				content += this.getLibrary().get(i).getExternalId() + ",";
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "DELETE FROM library WHERE user_id = '" + this.getId() + "' AND external_id = '" + externalId
+					+ "' AND content_type = '" + contentType + "'";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+	}
+
+	public void updateSavedContentInDB(int externalId, String contentType, double rating, int position) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "UPDATE library SET rating = '" + rating + "', position = '" + position +
+					"' WHERE user_id = '" + this.getId() + "' AND external_id = '" + externalId +
+					"' AND content_type = '" + contentType + "'";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+	}
+
+	public String getSavedContentFromDB(int userId, String contentType) {
+		String result = "";
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException error) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + error.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException error) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + error.getMessage());
+		}
+
+		// Creamos el statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException error) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + error.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "SELECT external_id, rating FROM library WHERE content_type = '" + contentType
+					+ "' AND user_id = "
+					+ userId + " ORDER BY rating DESC";
+
+			ResultSet rs = mStm.executeQuery(query);
+
+			while (rs.next()) {
+				result = result + "Content: " + rs.getInt("external_id") + " Rating: " + rs.getDouble("rating") + "\n";
 			}
+		} catch (SQLException error) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + error.getMessage());
 		}
 
-		// Si no hay contenido, devolvemos "null"
-		if (content.equals("")) {
-			return "null";
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException error) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + error.getMessage());
 		}
 
-		return content;
+		// Devolvemos el resultado
+		return result;
 	}
 
 	public static void updateCounter() {
 		try {
-			User.counter = Main.getUsers().size() - 1;
+			// Cargamos el driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// Conectamos con la base de datos
+			Connection conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+
+			// Creamos la statement
+			Statement mStm = conBD.createStatement();
+
+			// Ejecutamos la query para obtener el ID más alto
+			String query = "SELECT MAX(id) as max_id FROM users";
+			ResultSet rs = mStm.executeQuery(query);
+
+			if (rs.next()) {
+				User.counter = rs.getInt("max_id");
+			}
+
+			// Cerramos la conexión
+			mStm.close();
+			conBD.close();
+
 		} catch (Exception e) {
 			System.out.println("Error al actualizar el id de los usuarios: " + e.getMessage());
+		}
+	}
+
+	public int getContentPositionFromDB(int externalId, String contentType) {
+		int position = 0;
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "SELECT position FROM library WHERE user_id = '" + this.getId() +
+					"' AND external_id = '" + externalId + "' AND content_type = '" + contentType + "'";
+
+			ResultSet rs = mStm.executeQuery(query);
+			if (rs.next()) {
+				position = rs.getInt("position");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		return position;
+	}
+
+	public String getFriendsFromDB() {
+		StringBuilder result = new StringBuilder();
+		result.append("[");
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+			return "[]";
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+			return "[]";
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+			return "[]";
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "SELECT u.id, u.username FROM follows f " +
+					"JOIN users u ON f.followed_id = u.id " +
+					"WHERE f.user_id = '" + this.getId() + "'";
+
+			ResultSet rs = mStm.executeQuery(query);
+
+			boolean first = true;
+			while (rs.next()) {
+				if (!first) {
+					result.append(",");
+				}
+				result.append("{\"id\":").append(rs.getInt("id"))
+						.append(",\"username\":\"").append(rs.getString("username"))
+						.append("\"}");
+				first = false;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+			return "[]";
+		} finally {
+			// Cerramos la conexión
+			try {
+				if (mStm != null)
+					mStm.close();
+				if (conBD != null)
+					conBD.close();
+			} catch (SQLException e) {
+				System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+			}
+		}
+
+		result.append("]");
+		return result.toString();
+	}
+
+	public void addFriend(int followedId) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "INSERT INTO follows (user_id, followed_id) VALUES ('" + this.getId() + "', '" + followedId
+					+ "')";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+	}
+
+	public void removeFriend(int friendId) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+			throw new RuntimeException("Error al cargar el driver JDBC");
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+			throw new RuntimeException("Error al conectar con la base de datos");
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+			throw new RuntimeException("Error al crear la declaración SQL");
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "DELETE FROM follows WHERE user_id = '" + this.getId() + "' AND followed_id = '" + friendId
+					+ "'";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+			throw new RuntimeException("Error al eliminar el amigo");
+		} finally {
+			// Cerramos la conexión
+			try {
+				mStm.close();
+				conBD.close();
+			} catch (SQLException e) {
+				System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+			}
 		}
 	}
 
@@ -274,20 +621,12 @@ public class User {
 		this.password = password;
 	}
 
-	public ArrayList<SavedContent> getLibrary() {
-		return this.library;
-	}
-
 	public ArrayList<User> getFollowing() {
 		return this.following;
 	}
 
 	public int getCounter() {
-		return this.counter++;
-	}
-
-	public void setCounter() {
-		this.counter++;
+		return this.counter;
 	}
 
 	public String getAuthToken() {

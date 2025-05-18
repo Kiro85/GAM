@@ -9,6 +9,56 @@
     margin: 0 auto;
 }
 
+.no-friends,
+.error-message,
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(vars.$main-color, 0.8), rgba(vars.$main-color-2, 0.8));
+    border-radius: 20px;
+    border: 1px solid rgba(vars.$text-color, 0.1);
+    box-shadow: 0 8px 32px rgba(vars.$second-color, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+    animation: fadeIn 0.5s ease-in-out;
+    color: white;
+
+    p {
+        color: vars.$text-color;
+        font-size: 1.2rem;
+        margin: 10px 0;
+
+        &:first-child {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    }
+}
+
+.error-message {
+    background: linear-gradient(135deg, rgba(255, 87, 87, 0.1), rgba(255, 87, 87, 0.05));
+    border-color: rgba(255, 87, 87, 0.2);
+}
+
+.no-results {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    border-color: rgba(255, 193, 7, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .friend-card {
     background: linear-gradient(135deg, rgba(vars.$main-color, 0.8), rgba(vars.$main-color-2, 0.8));
     border-radius: 20px;

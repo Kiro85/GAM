@@ -2,8 +2,11 @@ import { logout, loginButtons } from './modules/login/login.js';
 import { initAuth } from './modules/login/initAuth.js';
 import { checkLoginStatus } from './modules/login/auth.js';
 import { initContent } from './modules/apis/initContent.js';
-import { showAnimes, showMangas } from './userContent/getUserContent.js';
-import { addToCollection } from './userContent/addUserContent.js';
+import { addToCollection } from './modules/userContent/addUserContent.js';
+import { removeFromCollection } from './modules/userContent/removeUserContent.js';
+import { updateFromCollection } from './modules/userContent/updateUserContent.js';
+import { getFriends } from './modules/userContent/getFriends.js';
+import { initUserSearch } from './modules/userContent/searchUsers.js';
 
 // Inicializar la página
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     logout();
     checkLoginStatus();
     initContent();
-    showAnimes();
-    showMangas();
     addToCollection();
+    removeFromCollection()
+    updateFromCollection();
+    if (window.location.pathname.includes('friends.html')) {
+        getFriends();
+        initUserSearch();
+    }
 });

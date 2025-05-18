@@ -1,0 +1,4 @@
+COSAS QUE HACER SI ME DA TIEMPO Y TENGO GANAS:
+
+1. Cancelar carga de catalogo si se pulsa tops y viceversa
+2. Que no se puedan repetir la posición de los tops

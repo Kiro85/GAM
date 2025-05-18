@@ -4,7 +4,7 @@ function saveContent(externalId, contentType, rating, position) {
 
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                return this.responseText;
+                alert(this.responseText);
             }
         };
 
@@ -20,19 +20,21 @@ function saveContent(externalId, contentType, rating, position) {
 function addToCollection() {
     const saveBtn = document.getElementById("addToCollection");
 
-    saveBtn.addEventListener("click", () => {
-        let modal = saveBtn.closest(".modal");
-        let contentType = modal.dataset.contentType;
-        let contentId = modal.dataset.contentId;
-        let rating = document.getElementById("rating").value;
-        let position = document.getElementById("topSelect").value;
+    if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+            let modal = saveBtn.closest(".modal");
+            let contentType = modal.dataset.contentType;
+            let contentId = modal.dataset.contentId;
+            let rating = document.getElementById("rating").value;
+            let position = document.getElementById("topSelect").value;
 
         if (position == "") {
             position = 0;
         }
 
-        saveContent(contentId, contentType, rating, position);
-    });
+            saveContent(contentId, contentType, rating, position);
+        });
+    }
 }
 
 export { addToCollection };

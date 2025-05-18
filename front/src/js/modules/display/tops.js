@@ -8,7 +8,7 @@ export function createTop(contentType, content) {
     // Añadimos una clase especial para el top 1, 2 y 3 o normal
     let showRibbon = false;
     let ribbonClass = '';
-    
+
     if (content.rank === 1) {
         top.classList.add('top--first');
         showRibbon = true;

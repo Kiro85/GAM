@@ -87,7 +87,7 @@
       </section>
     </section>
 
-    <!-- Modal para información del anime -->
+    <!-- Modal para información del contenido -->
     <article class="modal" id="modal">
       <section class="modal__content">
         <span class="modal__close">&times;</span>
@@ -102,7 +102,7 @@
           <p class="modal__synopsis"></p>
         </section>
         <section class="modal__actions">
-          <button class="modal__add-btn" id="addToCollection">
+          <button class="modal__btn" id="addToCollection">
             <i class="bi bi-plus-circle"></i> Add to collection
           </button>
           <div class="modal__rating">
@@ -128,6 +128,18 @@
               <option value="10">#10</option>
             </select>
           </div>
+        </section>
+        <section class="modal__comments">
+          <h3 class="modal__comments-title">Comentarios</h3>
+          <section class="modal__comments-form">
+            <label for="comment">Añadir comentario</label>
+            <input type="text" placeholder="Escribe tu comentario..." id="commentText" value="">
+            <button class="modal__comments-button" id="addComment">Añadir comentario</button>
+          </section>
+          
+          <section class="modal__comments-list" id="commentsList">
+            <!-- Aquí se mostrarán los comentarios -->
+          </section>
         </section>
       </section>
     </article>

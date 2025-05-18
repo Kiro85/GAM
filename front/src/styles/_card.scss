@@ -129,10 +129,23 @@
     max-width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     strong {
       width: 50%;
     }
+  }
+
+  &__rating {
+    background-color: rgba(vars.$second-color, 0.8);
+    color: vars.$text-color;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    backdrop-filter: blur(2px);
   }
 
   &__footer {

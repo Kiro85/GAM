@@ -1,4 +1,3 @@
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,33 +35,40 @@ public class FetchAnimes extends HttpServlet {
 
 		String apiUrl = null;
 		String limit = request.getParameter("limit");
-		
+
 		try {
 			if (limit != null && !limit.isEmpty()) {
 				apiUrl = "https://api.jikan.moe/v4/top/anime?limit=" + limit;
-				
+
 			} else {
 				// Obtenemos los parametros de la petición
 				String page = request.getParameter("page");
 				String genre = request.getParameter("genre");
 				String search = request.getParameter("search");
-	
-				// Si no hay pagina, la establecemos a 1
-				if (page == null || page.isEmpty())
-					page = "1";
-	
-				// Establecemos la url de la API
-				apiUrl = "https://api.jikan.moe/v4/top/anime?page=" + page;
-	
-				// Si hay genero, añadimos el genero a la url
-				if (genre != null && !genre.isEmpty()) {
-					apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&genres=" + genre;
-				}
-	
-				// Si hay busqueda, añadimos la busqueda a la url
-				if (search != null && !search.isEmpty()) {
-					apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&q="
-							+ java.net.URLEncoder.encode(search, "UTF-8");
+				String id = request.getParameter("id");
+
+				// Si hay id, añadimos el id a la url
+				if (id != null && !id.isEmpty()) {
+					apiUrl = "https://api.jikan.moe/v4/anime/" + id;
+
+				} else {
+					// Si no hay pagina, la establecemos a 1
+					if (page == null || page.isEmpty())
+						page = "1";
+
+					// Establecemos la url de la API
+					apiUrl = "https://api.jikan.moe/v4/top/anime?page=" + page;
+
+					// Si hay genero, añadimos el genero a la url
+					if (genre != null && !genre.isEmpty()) {
+						apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&genres=" + genre;
+					}
+
+					// Si hay busqueda, añadimos la busqueda a la url
+					if (search != null && !search.isEmpty()) {
+						apiUrl = "https://api.jikan.moe/v4/anime?page=" + page + "&q="
+								+ java.net.URLEncoder.encode(search, "UTF-8");
+					}
 				}
 			}
 
@@ -71,38 +77,57 @@ public class FetchAnimes extends HttpServlet {
 			System.out.println("Error al obtener animes: " + e.getMessage());
 		}
 
-		// Hacemos el fetch a la API
-		try {
-			// Abrimos la conexión
-			URL url = new URL(apiUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.connect();
+		// Hacemos el fetch a la API con reintentos
+		int maxRetries = 3;
+		int retryCount = 0;
+		boolean success = false;
 
-			// Obtenemos el estado de la respuesta
-			int status = conn.getResponseCode();
-			if (status != 200) {
-				throw new RuntimeException("Ha ocurrido un error: " + status); // Si el estado no es 200, lanzamos una
-																				// excepción
-			} else {
-				// Leemos los datos
-				StringBuilder info = new StringBuilder(); // variable que enviaremos al frontend
-				Scanner scanner = new Scanner(url.openStream()); // Abrimos el flujo de datos y lo escaneamos
-
-				while (scanner.hasNext()) {
-					info.append(scanner.nextLine());
+		while (!success && retryCount < maxRetries) {
+			try {
+				// Esperamos antes de cada intento (excepto el primero)
+				if (retryCount > 0) {
+					Thread.sleep(1000); // Esperamos 1 segundos entre intentos
 				}
 
-				scanner.close();
-				conn.disconnect();
+				// Abrimos la conexión
+				URL url = new URL(apiUrl);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.connect();
 
-				// Enviamos la respuesta al frontend
-				response.getWriter().append(info.toString());
+				// Obtenemos el estado de la respuesta
+				int status = conn.getResponseCode();
+
+				if (status == 200) {
+					// Leemos los datos
+					StringBuilder info = new StringBuilder();
+					Scanner scanner = new Scanner(url.openStream());
+
+					while (scanner.hasNext()) {
+						info.append(scanner.nextLine());
+					}
+
+					scanner.close();
+					conn.disconnect();
+
+					// Enviamos la respuesta al frontend
+					response.getWriter().append(info.toString());
+					success = true;
+				} else if (status == 429) {
+					// Si recibimos 429, incrementamos el contador de reintentos
+					retryCount++;
+					System.out.println("Rate limit alcanzado. Reintento " + retryCount + " de " + maxRetries);
+				} else {
+					throw new RuntimeException("Ha ocurrido un error: " + status);
+				}
+
+			} catch (Exception e) {
+				retryCount++;
+				if (retryCount >= maxRetries) {
+					response.getWriter().append("Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
+					System.out.println("Error al obtener animes después de " + maxRetries + " intentos: " + e.getMessage());
+				}
 			}
-
-		} catch (Exception e) {
-			response.getWriter().append("Error al obtener animes: " + e.getMessage());
-			System.out.println("Error al obtener animes: " + e.getMessage());
 		}
 	}
 

@@ -1,3 +1,6 @@
+import { getComments } from '../userContent/getComments.js';
+import { addComment } from '../userContent/addComment.js';
+
 // Elementos del DOM
 const modal = document.getElementById("modal");
 const modalClose = modal ? modal.querySelector(".modal__close") : null;
@@ -43,6 +46,10 @@ export async function showModal(contentType, content) {
                 modalImage.src = content.images.webp.large_image_url;
 
             } else if (content && contentType === 'manga') {
+                // Agregamos datasets al modal
+                modal.dataset.contentType = contentType;
+                modal.dataset.contentId = content.mal_id;
+
                 // Actualizamos el contenido del modal para manga
                 modalTitle.textContent = content.title_english || content.title;
                 modalDetails.innerHTML = `
@@ -56,6 +63,10 @@ export async function showModal(contentType, content) {
                 modalSynopsis.textContent = content.synopsis || "Sin sinopsis disponible.";
                 modalImage.src = content.images.webp.large_image_url;
             }
+
+            // Inicializamos los comentarios
+            getComments();
+            addComment();
         }
 
         // Inicializar event listeners si el modal existe
@@ -75,6 +86,15 @@ export async function showModal(contentType, content) {
                     closeModal();
                 }
             });
+
+            // Actualizar el valor del rating cuando se mueve la barra
+            const ratingInput = document.getElementById("rating");
+            const ratingValue = document.querySelector(".modal__rating-value");
+            if (ratingInput && ratingValue) {
+                ratingInput.addEventListener("input", (e) => {
+                    ratingValue.textContent = e.target.value;
+                });
+            }
         }
     }
 }

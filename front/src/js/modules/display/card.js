@@ -1,6 +1,6 @@
 import { showModal } from './modal.js';
 
-export function createCard(contentType, content) {
+export function createCard(contentType, content, saved) {
     // Creamos el elemento de la card
     const card = document.createElement('article');
     card.classList.add('card');
@@ -29,6 +29,7 @@ export function createCard(contentType, content) {
                     <section class="card__description">
                         <header class="card__title">
                             <h3 class="card__title-text"><strong>Top: #${content.rank}</strong></h3>
+                            ${saved ? `<div class="card__rating">⭐ ${content.rating.toFixed(1)}</div>` : ''}
                         </header>
                         <footer class="card__footer"><p>${content.genres[0]?.name || "Sin género"} &nbsp; | &nbsp; Capitulos: ${content.episodes || content.chapters || "N/A"}</p></footer>
                     </section>

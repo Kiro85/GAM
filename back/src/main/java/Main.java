@@ -7,8 +7,7 @@ import java.util.ArrayList;
 
 public class Main {
 	// Attributes
-	public static ArrayList<User> users;
-	public static ArrayList<Content> contents = new ArrayList<Content>();
+	public static ArrayList<User> users = new ArrayList<User>();
 
 	// Methods
 	public static void showUsers() {
@@ -22,6 +21,7 @@ public class Main {
 	}
 
 	public static int searchUser(String username) {
+
 		boolean found = false;
 		int i = 0;
 
@@ -37,6 +37,29 @@ public class Main {
 			System.out.println("Error al buscar el usuario: " + e.getMessage());
 		}
 
+		return i;
+	}
+
+	public static int searchUserById(int userId) {
+
+		boolean found = false;
+		int i = 0;
+
+		try {
+			while (!found && i < getUsers().size()) {
+				if (getUsers().get(i).getId() == userId) {
+					found = true;
+				} else {
+					i++;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Error al buscar el usuario: " + e.getMessage());
+		}
+
+		if (!found) {
+			i = -1;
+		}
 		return i;
 	}
 
@@ -209,18 +232,25 @@ public class Main {
 	}
 
 	public static int searchUserByToken(String authToken) {
+
 		boolean found = false;
 		int i = 0;
 
-		while (!found && i < getUsers().size()) {
-			if (getUsers().get(i).getAuthToken().equals(authToken)) {
-				found = true;
-			} else {
-				i++;
+		try {
+			while (!found && i < getUsers().size()) {
+				String userToken = getUsers().get(i).getAuthToken();
+				if (userToken != null && userToken.equals(authToken)) {
+					found = true;
+				} else {
+					i++;
+				}
 			}
+		} catch (Exception e) {
+			System.out.println("Error al buscar usuario por token: " + e.getMessage());
+			i = -1;
 		}
 
-		if (!found) {
+		if (authToken == null || authToken.isEmpty() || getUsers() == null || getUsers().isEmpty()) {
 			i = -1;
 		}
 
@@ -248,6 +278,107 @@ public class Main {
 		return found;
 	}
 
+	public static void addComment(int userId, String comment, int externalId) {
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "INSERT INTO comments (user_id, external_id, comment) VALUES ('" + userId + "', '"
+					+ externalId + "', '" + comment + "')";
+			mStm.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+	}
+
+	public static String getComments(int externalId) {
+		String comments = "";
+
+		// Cargamos el driver
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("Error al cargar el driver JDBC de MySQL: " + e.getMessage());
+		}
+
+		// Conectamos con la base de datos
+		Connection conBD = null;
+		try {
+			conBD = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/gam",
+					"root", "");
+		} catch (SQLException e) {
+			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Creamos la statement
+		Statement mStm = null;
+		try {
+			mStm = conBD.createStatement();
+		} catch (SQLException e) {
+			System.out.println("Error al establecer declaración de conexión MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Ejecutamos la query
+		try {
+			String query = "SELECT user_id, comment, commented_at FROM comments WHERE external_id = '" + externalId
+					+ "' ORDER BY commented_at DESC";
+			ResultSet rs = mStm.executeQuery(query);
+
+			while (rs.next()) {
+				comments = comments +
+						"<div class='modal__comment'>" +
+						"<i class='modal__comment-icon bi bi-person-circle'></i>" +
+						"<p class='modal__comment-text'>" + rs.getString("comment") + "</p>" +
+						"<p class='modal__comment-date'>" + rs.getString("commented_at") + "</p>" +
+						"</div>";
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar SQL en servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		// Cerramos la conexión
+		try {
+			mStm.close();
+			conBD.close();
+		} catch (SQLException e) {
+			System.out.println("Error al cerrar conexión a servidor MySQL/MariaDB: " + e.getMessage());
+		}
+
+		return comments;
+	}
+
 	public static boolean searchIfUserExists(String username) {
 		boolean found = false;
 
@@ -268,46 +399,8 @@ public class Main {
 		return found;
 	}
 
-	public static int searchContent(int externalId, String contentType, ArrayList<Content> contents) {
-
-		int i = 0;
-		boolean found = false;
-
-		if (contents != null) {
-			while (!found && i < getContents().size()) {
-				if (contents.get(i).getContentType().equals(contentType)
-						&& contents.get(i).getExternalId() == externalId) {
-					found = true;
-				} else {
-					i++;
-				}
-			}
-		}
-
-		if (!found) {
-			i = -1;
-		}
-
-		return i;
-	}
-
-	public static void updateContents() {
-		contents = new ArrayList<Content>();
-
-		String contentsDB = "";
-		try {
-			contentsDB = getContentsFromDB();
-		} catch (Exception error) {
-			System.out.println("Error al obtener los contenidos de la base de datos: " + error.getMessage());
-		}
-	}
-
 	// Getters & Setters
 	public static ArrayList<User> getUsers() {
 		return users;
-	}
-
-	public static ArrayList<Content> getContents() {
-		return contents;
 	}
 }

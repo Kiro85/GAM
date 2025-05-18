@@ -4,13 +4,15 @@ import { createCard } from '../display/card';
 import { createTop } from '../display/tops';
 import { debounce, showError, showLoadingState } from './apiControl';
 import { resetSelectorToCatalog } from './initContent';
+import { getSavedAnimes } from '../userContent/getUserContent';
+import { getAnimePosition } from '../userContent/getUserContent';
 
 // Variables para mantener el estado
 let currentPage = 1;
 let currentGenre = '';
 
 // Función para mostrar los animes
-function showAnimes({ page = 1, genre = '', search = '' } = {}) {
+function showAnimes({ page = 1, genre = '', search = '', id = '' } = {}) {
     const content = document.getElementById('content');
 
     if (content) {
@@ -60,6 +62,170 @@ function showAnimesTops() {
                 console.error('Error al obtener animes:', error);
                 showError(content, error, null, showAnimesTops);
             });
+    }
+}
+
+// Función para mostrar los tops del usuario
+async function showUserAnimeTops() {
+    const content = document.getElementById('savedContent');
+
+    if (content) {
+        showLoadingState(content);
+
+        try {
+            const savedContent = await getSavedAnimes();
+            if (savedContent) {
+                content.innerHTML = '';
+
+                // Convertimos la cadena de IDs en un array y filtramos valores vacíos
+                const animeIds = savedContent.split(',').filter(id => id.trim());
+                const loadedAnimes = [];
+
+                // Cargamos todos los animes primero
+                for (const animeId of animeIds) {
+                    try {
+                        const response = await fetchAnimes({ id: animeId.trim() });
+                        if (response.data) {
+                            // Obtenemos la posición del anime en la base de datos
+                            const position = await getAnimePosition(animeId.trim());
+                            response.data.position = position;
+                            loadedAnimes.push(response.data);
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                    } catch (error) {
+                        console.error(`Error al obtener anime ${animeId}:`, error);
+                        continue;
+                    }
+                }
+
+                // Ordenamos por posición, poniendo los que no tienen posición (0) al final
+                loadedAnimes
+                    .sort((a, b) => {
+                        // Si alguno tiene posición 0, lo ponemos al final
+                        if (a.position === 0) return 1;
+                        if (b.position === 0) return -1;
+                        // Si ambos tienen posición, ordenamos por posición
+                        return a.position - b.position;
+                    })
+                    .slice(0, 10)
+                    .forEach((anime) => {
+                        anime.rank = anime.position || 0; // Usamos la posición guardada o 0 si no tiene
+                        let top = createTop('anime', anime);
+                        content.appendChild(top);
+                    });
+            }
+        } catch (error) {
+            console.error('Error al mostrar tops de anime:', error);
+            showError(content, error, null, showUserAnimeTops);
+        }
+    }
+}
+
+// Función para mostrar el contenido guardado
+async function showSavedAnimes() {
+    const content = document.getElementById('savedContent');
+
+    if (content) {
+        // Mostramos el estado de carga
+        showLoadingState(content);
+
+        try {
+            // Obtenemos el contenido guardado
+            const savedContent = await getSavedAnimes();
+
+            if (savedContent) {
+                // Convertimos la cadena en un array de objetos con id y rating
+                const contentItems = savedContent.split('\n')
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const match = line.match(/Content: (\d+) Rating: ([\d.]+)/);
+                        if (match) {
+                            return {
+                                id: match[1],
+                                rating: parseFloat(match[2])
+                            };
+                        }
+                        return null;
+                    })
+                    .filter(item => item !== null);
+
+                // Array para almacenar todos los animes cargados
+                const loadedAnimes = [];
+
+                // Cargamos todos los animes primero
+                for (const item of contentItems) {
+                    try {
+                        const response = await fetchAnimes({ id: item.id });
+                        if (response.data) {
+                            response.data.rating = item.rating;
+                            loadedAnimes.push(response.data);
+                        }
+
+                        // Esperamos 1.5 segundos entre cada petición
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    } catch (error) {
+                        console.error(`Error al obtener anime ${item.id}:`, error);
+                        // Continuamos con el siguiente anime si hay error
+                        continue;
+                    }
+                }
+
+                // Una vez cargados todos, limpiamos el contenido y mostramos las tarjetas
+                content.innerHTML = '';
+
+                loadedAnimes.forEach(anime => {
+                    let card = createCard('anime', anime, true);
+                    content.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Error al mostrar animes guardados:', error);
+            showError(content, error, null, showSavedAnimes);
+        }
+    }
+}
+
+// Función para obtener los animes guardados de un usuario
+async function getFriendAnimes(animes) {
+    try {
+        if (!animes) return [];
+
+        let animeItems;
+
+        if (Array.isArray(animes)) {
+            animeItems = animes.map(id => ({ id, rating: 0 }));
+        } else {
+            const strAnimes = String(animes);
+            animeItems = strAnimes.split('\n')
+                .map(line => {
+                    const match = line.match(/Content: (\d+) Rating: ([\d.]+)/);
+                    return match ? {
+                        id: match[1],
+                        rating: parseFloat(match[2])
+                    } : null;
+                })
+                .filter(item => item !== null);
+        }
+
+        const loadedAnimes = [];
+
+        for (const item of animeItems) {
+            try {
+                const response = await fetchAnimes({ id: item.id.trim() });
+                if (response.data) {
+                    response.data.rating = item.rating;
+                    loadedAnimes.push(response.data);
+                }
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return loadedAnimes;
+    } catch (error) {
+        return [];
     }
 }
 
@@ -174,4 +340,4 @@ function filterByAnimeSearch() {
     }
 }
 
-export { showAnimes, showAnimesTops, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch };
+export { showAnimes, showAnimesTops, showSavedAnimes, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch, showUserAnimeTops, getFriendAnimes };

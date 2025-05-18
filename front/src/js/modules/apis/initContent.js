@@ -1,5 +1,5 @@
-import { showAnimes, showAnimesTops, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch } from './anime.js';
-import { showMangas, showMangasTops, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch } from './mangas.js';
+import { showAnimes, showAnimesTops, showSavedAnimes, showAnimesGenres, animePages, filterByAnimeGenre, filterByAnimeSearch, showUserAnimeTops } from './anime.js';
+import { showMangas, showMangasTops, showSavedMangas, showMangasGenres, mangaPages, filterByMangaGenre, filterByMangaSearch, showUserMangaTops } from './mangas.js';
 
 let currentCategory = 'mangas'; // Para mantener un registro de la categoría 
 
@@ -54,51 +54,120 @@ function initContent() {
     // Función para manejar la lógica de cada categoría
     function handleCategory(action) {
         const content = document.getElementById('content');
+        const savedContent = document.getElementById('savedContent');
 
-        // Limpiar el contenido y los event listeners anteriores
         if (content) {
+            // Limpiar el contenido y los event listeners anteriores
             content.innerHTML = '';
-        }
 
-        // Remover todos los event listeners anteriores
-        removeEventListeners();
+            // Remover todos los event listeners anteriores
+            removeEventListeners();
 
-        // Actualizar la categoría actual
-        currentCategory = action;
+            // Actualizar la categoría actual
+            currentCategory = action;
 
-        // Obtenemos el estado actual del selector (catalog/tops)
-        const currentAction = content.dataset.action || 'catalog';
+            // Obtenemos el estado actual del selector (catalog/tops)
+            const currentAction = content.dataset.action || 'catalog';
 
-        switch (action) {
-            case 'animes':
-                showAnimesGenres();
-                animePages();
-                filterByAnimeGenre(currentCategory);
-                filterByAnimeSearch();
-                handleContent(currentCategory);
-                // Mantenemos el estado del selector
-                if (currentAction === 'tops') {
-                    showAnimesTops();
+            switch (action) {
+                case 'animes':
+                    showAnimesGenres();
+                    animePages();
+                    filterByAnimeGenre(currentCategory);
+                    filterByAnimeSearch();
+                    handleContent(currentCategory);
+                    // Mantenemos el estado del selector
+                    if (currentAction === 'tops') {
+                        showAnimesTops();
+                    } else {
+                        showAnimes({ page: 1 });
+                    }
+                    break;
+
+                case 'mangas':
+                    showMangasGenres();
+                    mangaPages();
+                    filterByMangaGenre(currentCategory);
+                    filterByMangaSearch();
+                    handleContent(currentCategory);
+                    // Mantenemos el estado del selector
+                    if (currentAction === 'tops') {
+                        showMangasTops();
+                    } else {
+                        showMangas({ page: 1 });
+                    }
+                    break;
+                default:
+                    console.log('Categoría no reconocida:', action);
+            }
+
+        } else if (savedContent) {
+            // Limpiar el contenido y los event listeners anteriores
+            savedContent.innerHTML = '';
+            removeEventListeners();
+
+            // Actualizar la categoría actual
+            currentCategory = action;
+
+            // Obtenemos el estado actual del selector (catalog/tops)
+            const currentAction = savedContent.dataset.action || 'catalog';
+
+            // Añadimos el selector de catalog/tops para la página de usuario
+            const selector = document.getElementById('selector');
+            if (selector) {
+                const newSelector = selector.cloneNode(true);
+                selector.parentNode.replaceChild(newSelector, selector);
+
+                newSelector.addEventListener('click', (e) => {
+                    const button = e.target.closest('button');
+
+                    // Quitamos la clase active de todos los botones
+                    newSelector.querySelectorAll('button').forEach(btn => {
+                        btn.classList.remove('selector--active');
+                    });
+
+                    // Añadimos la clase active al botón clickeado
+                    button.classList.add('selector--active');
+
+                    if (button.id === 'catalog') {
+                        savedContent.dataset.action = 'catalog';
+                        action === 'animes' ? showSavedAnimes() : showSavedMangas();
+                    } else if (button.id === 'tops') {
+                        savedContent.dataset.action = 'tops';
+                        action === 'animes' ? showUserAnimeTops() : showUserMangaTops();
+                    }
+                });
+
+                // Establecemos el estado inicial
+                const activeButton = newSelector.querySelector(`#${currentAction}`);
+                if (activeButton) {
+                    activeButton.classList.add('selector--active');
                 } else {
-                    showAnimes({ page: 1 });
+                    const catalogButton = newSelector.querySelector('#catalog');
+                    if (catalogButton) {
+                        catalogButton.classList.add('selector--active');
+                    }
                 }
-                break;
+            }
 
-            case 'mangas':
-                showMangasGenres();
-                mangaPages();
-                filterByMangaGenre(currentCategory);
-                filterByMangaSearch();
-                handleContent(currentCategory);
-                // Mantenemos el estado del selector
-                if (currentAction === 'tops') {
-                    showMangasTops();
-                } else {
-                    showMangas({ page: 1 });
-                }
-                break;
-            default:
-                console.log('Categoría no reconocida:', action);
+            switch (action) {
+                case 'animes':
+                    if (currentAction === 'tops') {
+                        showUserAnimeTops();
+                    } else {
+                        showSavedAnimes();
+                    }
+                    break;
+                case 'mangas':
+                    if (currentAction === 'tops') {
+                        showUserMangaTops();
+                    } else {
+                        showSavedMangas();
+                    }
+                    break;
+                default:
+                    console.log('Categoría no reconocida:', action);
+            }
         }
     }
 
@@ -160,7 +229,11 @@ function handleContent(currentCategory) {
                 currentCategory === 'animes' ? showAnimes({ page: 1 }) : showMangas({ page: 1 });
             } else if (button.id === 'tops') {
                 content.dataset.action = 'tops';
-                currentCategory === 'animes' ? showAnimesTops() : showMangasTops();
+                if (window.location.pathname.includes('user')) {
+                    currentCategory === 'animes' ? showUserAnimeTops() : showUserMangaTops();
+                } else {
+                    currentCategory === 'animes' ? showAnimesTops() : showMangasTops();
+                }
             }
         });
 
