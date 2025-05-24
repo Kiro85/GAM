@@ -11,7 +11,6 @@ public class User {
 	private String username;
 	private String password;
 	private String authToken;
-	private ArrayList<User> following = new ArrayList<User>();
 
 	private static int counter;
 
@@ -619,10 +618,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public ArrayList<User> getFollowing() {
-		return this.following;
 	}
 
 	public int getCounter() {
