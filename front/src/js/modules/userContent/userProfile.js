@@ -2,12 +2,16 @@ import { getSavedAnimes, getSavedMangas } from './getUserContent.js';
 import { createUserProfile, initUserProfile } from '../display/userProfileModal.js';
 import { getFriendAnimes } from '../apis/anime.js';
 import { getFriendMangas } from '../apis/mangas.js';
+import { showLoadingState } from '../apis/apiControl.js';
 
 export async function showUserProfile(userId, username) {
     // Obtener el contenedor donde se mostrará el perfil
     const container = document.getElementById('friends-container');
 
     if (container) {
+        // Mostramos el estado de carga
+        showLoadingState(container);
+
         try {
             // Esperamos a que se resuelvan las promesas
             const [animes, mangas] = await Promise.all([

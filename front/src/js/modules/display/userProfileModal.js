@@ -1,14 +1,16 @@
+import { Backend } from '../../config.js';
+
 // Función interna para crear el HTML del perfil
 function createUserProfile(user) {
     return `
         <div class="user-profile">
             <div class="user-profile__header">
                 <img class="user-profile__banner" 
-                    src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=banner_image&t=${new Date().getTime()}" 
+                    src="${Backend}/GetProfileImage?username=${user.username}&imageType=banner_image&t=${new Date().getTime()}" 
                     alt="Banner de ${user.username}">
                 <div class="user-profile__profile">
                     <div class="user-profile__avatar">
-                        <img src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
+                        <img src="${Backend}/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
                             alt="Avatar de ${user.username}">
                     </div>
                     <h2 class="user-profile__username">${user.username}</h2>

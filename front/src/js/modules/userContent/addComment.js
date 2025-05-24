@@ -1,5 +1,5 @@
 import { getComments } from './getComments.js';
-
+import { Backend } from '../../config.js';
 function addCommentToDB(comment, contentId) {
     try {
         var http = new XMLHttpRequest();
@@ -11,7 +11,7 @@ function addCommentToDB(comment, contentId) {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/AddComment", true);
+        http.open("POST", `${Backend}/AddComment`, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&comment=" + comment + "&contentId=" + contentId);
 

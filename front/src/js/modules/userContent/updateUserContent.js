@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 function updateContent(externalId, contentType, rating, position) {
     try {
         var http = new XMLHttpRequest();
@@ -9,7 +11,7 @@ function updateContent(externalId, contentType, rating, position) {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/UpdateContent", true);
+        http.open("POST", `${Backend}/UpdateContent`, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&externalId=" + externalId + "&contentType=" + contentType + "&rating=" + rating + "&position=" + position);
 

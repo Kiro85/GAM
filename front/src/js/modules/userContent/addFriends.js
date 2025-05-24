@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 // Función para agregar un amigo
 function addFriend(friendUsername, button) {
     try {
@@ -21,7 +23,7 @@ function addFriend(friendUsername, button) {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/AddFriend", true);
+        http.open("POST", `${Backend}/AddFriend`, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&friendUsername=" + friendUsername);
 

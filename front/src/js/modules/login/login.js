@@ -1,3 +1,5 @@
+import { Backend, Frontend } from '../../config.js';
+
 // Función para el inicio de sesión
 function login() {
     let username = document.querySelector('[data-action="login-username"]').value;
@@ -15,14 +17,14 @@ function login() {
                     localStorage.setItem('authToken', token); // lo guardamos en el localStorage
                     localStorage.setItem('username', username); // guardamos el nombre de usuario
                     console.log('Inicio de sesión exitoso. Token guardado:', token);
-                    window.location.href = "http://localhost:5173/index.html";
+                    window.location.href = `${Frontend}/index.html`;
                 } else {
                     alert("Usuario o contraseña incorrectos");
                 }
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/Login", true);
+        http.open("POST", `${Backend}/Login`, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         http.send("username=" + username + "&password=" + password);
 
@@ -47,7 +49,7 @@ function register() {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/Register", true);
+        http.open("POST", `${API_URL}/Register`, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         http.send("username=" + username + "&password=" + password + "&repeatPassword=" + repeatPassword);
 
@@ -73,7 +75,7 @@ function changePassword() {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/ChangePassword", true);
+        http.open("POST", `${Backend}/ChangePassword`, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         http.send("username=" + username + "&oldPassword=" + oldPassword + "&newPassword=" + newPassword + "&confirmPassword=" + confirmPassword);
 
@@ -91,7 +93,7 @@ function logout() {
             logoutBtn.addEventListener('click', () => {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('username'); // Eliminamos el nombre de usuario
-                window.location.href = "http://localhost:5173/pages/login.html";
+                window.location.href = `${Frontend}/pages/login.html`;
             });
         }
     } catch (error) {

@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 export function fetchMangasGenres() {
     return new Promise((resolve, reject) => {
 
@@ -18,7 +20,7 @@ export function fetchMangasGenres() {
             }
         }
 
-        http.open("GET", "http://localhost:8080/GAM/FetchMangasGenres", true);
+        http.open("GET", `${Backend}/FetchMangasGenres`, true);
         http.send();
     });
 }

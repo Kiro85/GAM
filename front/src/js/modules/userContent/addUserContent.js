@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 function saveContent(externalId, contentType, rating, position) {
     try {
         var http = new XMLHttpRequest();
@@ -8,7 +10,7 @@ function saveContent(externalId, contentType, rating, position) {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/SaveContent", true);
+        http.open("POST", `${Backend}/SaveContent`, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&externalId=" + externalId + "&contentType=" + contentType + "&rating=" + rating + "&position=" + position);
 

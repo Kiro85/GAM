@@ -60,6 +60,9 @@ npm run dev
 3. Iniciar el servidor de Apache y MySQL en XAPP
 4. Añadir la base de datos en tu servidor MySQL
 
+#### Base de datos
+1. para crear la base de datos se puede usar el script situado en GAM/media/BD-Script.sql
+
 ### 4.3 Configuración
 1. Configurar las variables de entorno necesarias
 2. Asegurarse de que los puertos necesarios están disponibles

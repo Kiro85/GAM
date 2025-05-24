@@ -145,8 +145,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException error) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + error.getMessage());
 		}
@@ -203,8 +204,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -293,8 +295,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -339,8 +342,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -364,7 +368,8 @@ public class Main {
 				int userId = rs.getInt("user_id");
 				comments = comments +
 						"<div class='modal__comment'>" +
-						"<svg class='modal__comment-avatar' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-user'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>" +
+						"<svg class='modal__comment-avatar' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-user'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>"
+						+
 						"<div class='modal__comment-content'>" +
 						"<p class='modal__comment-username'>" + rs.getString("username") + "</p>" +
 						"<p class='modal__comment-text'>" + rs.getString("comment") + "</p>" +
@@ -421,8 +426,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -472,8 +478,9 @@ public class Main {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}

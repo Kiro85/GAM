@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 export function fetchUsers(searchTerm) {
     return new Promise((resolve, reject) => {
         try {
@@ -13,7 +15,7 @@ export function fetchUsers(searchTerm) {
                 }
             };
 
-            http.open("GET", "http://localhost:8080/GAM/SearchUsers?userToken=" + localStorage.getItem('authToken') + "&search=" + searchTerm, true);
+            http.open("GET", `${Backend}/SearchUsers?userToken=` + localStorage.getItem('authToken') + "&search=" + searchTerm, true);
             http.send();
 
         } catch (error) {

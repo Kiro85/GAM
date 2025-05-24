@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 export function fetchAnimesGenres() {
     return new Promise((resolve, reject) => {
 
@@ -18,7 +20,7 @@ export function fetchAnimesGenres() {
             }
         }
 
-        http.open("GET", "http://localhost:8080/GAM/FetchAnimesGenres", true);
+        http.open("GET", `${Backend}/FetchAnimesGenres`, true);
         http.send();
     });
 }

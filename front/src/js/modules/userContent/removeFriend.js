@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 function removeFriendFromDB(friendId) {
     return new Promise((resolve, reject) => {
         try {
@@ -25,7 +27,7 @@ function removeFriendFromDB(friendId) {
                 }
             };
 
-            http.open("POST", "http://localhost:8080/GAM/RemoveFriend", true);
+            http.open("POST", `${Backend}/RemoveFriend`, true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send("userToken=" + localStorage.getItem('authToken') + "&friendId=" + friendId);
 

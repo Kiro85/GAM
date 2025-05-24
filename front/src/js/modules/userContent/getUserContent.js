@@ -1,4 +1,6 @@
-function    getSavedContent(userId, contentType) {
+import { Backend } from '../../config.js';
+
+function getSavedContent(userId, contentType) {
     return new Promise((resolve, reject) => {
         try {
             var http = new XMLHttpRequest();
@@ -13,7 +15,7 @@ function    getSavedContent(userId, contentType) {
                 }
             };
 
-            http.open("GET", "http://localhost:8080/GAM/GetSavedContent?userToken=" + localStorage.getItem('authToken') + "&userId=" + userId + "&contentType=" + contentType, true);
+            http.open("GET", `${Backend}/GetSavedContent?userToken=` + localStorage.getItem('authToken') + "&userId=" + userId + "&contentType=" + contentType, true);
             http.send();
 
         } catch (error) {
@@ -72,7 +74,7 @@ async function getAnimePosition(animeId) {
                 }
             };
 
-            http.open("POST", "http://localhost:8080/GAM/GetContentPosition", true);
+            http.open("POST", `${Backend}/GetContentPosition`, true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send("userToken=" + localStorage.getItem('authToken') +
                 "&externalId=" + animeId +
@@ -101,7 +103,7 @@ async function getMangaPosition(mangaId) {
                 }
             };
 
-            http.open("POST", "http://localhost:8080/GAM/GetContentPosition", true);
+            http.open("POST", `${Backend}/GetContentPosition`, true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send("userToken=" + localStorage.getItem('authToken') +
                 "&externalId=" + mangaId +

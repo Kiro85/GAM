@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 export function getUserProfile(username) {
     try {
         var http = new XMLHttpRequest();
@@ -8,7 +10,7 @@ export function getUserProfile(username) {
             }
         };
 
-        http.open("GET", "http://localhost:8080/GAM/GetUserProfile?username=" + username, true);
+        http.open("GET", `${Backend}/GetUserProfile?username=` + username, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send();
 

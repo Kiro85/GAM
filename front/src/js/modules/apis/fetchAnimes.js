@@ -1,7 +1,9 @@
+import { Backend } from '../../config.js';
+
 export function fetchAnimes({ page = 1, genre = '', search = '', limit = '', id = '' } = {}) {
     return new Promise((resolve, reject) => {
         // Establecemos la url de la API con los parametros de la petición
-        let url = `http://localhost:8080/GAM/FetchAnimes?page=${page}`;
+        let url = `${Backend}/FetchAnimes?page=${page}`;
         if (genre) url += `&genre=${encodeURIComponent(genre)}`;
         if (search) url += `&search=${encodeURIComponent(search)}`;
         if (limit) url += `&limit=${limit}`;

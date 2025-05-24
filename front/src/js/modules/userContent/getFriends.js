@@ -1,5 +1,5 @@
 import { createFriendCard } from '../display/friendCard.js';
-
+import { Backend } from '../../config.js';
 function getFriendsFromDB() {
     return new Promise((resolve, reject) => {
         try {
@@ -27,7 +27,7 @@ function getFriendsFromDB() {
                 }
             };
 
-            http.open("POST", "http://localhost:8080/GAM/GetFriends", true);
+            http.open("POST", `${Backend}/GetFriends`, true);
             http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             http.send("userToken=" + localStorage.getItem('authToken'));
 

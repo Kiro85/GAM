@@ -1,7 +1,7 @@
 import { fetchUsers } from './fetchUsers.js';
 import { debounce } from '../apis/apiControl.js';
 import { handleAddFriendButton } from './addFriends.js';
-
+import { Backend } from '../../config.js';
 export function initUserSearch() {
     const searchInput = document.querySelector('.search__input');
     const friendsContainer = document.getElementById('friends-container');
@@ -48,7 +48,7 @@ function displaySearchResults(users, container) {
     container.innerHTML = userObjects.map(user => `
         <article class="friend-card">
             <img class="friend-card__avatar" 
-                src="http://localhost:8080/GAM/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
+                src="${Backend}/GetProfileImage?username=${user.username}&imageType=avatar_image&t=${new Date().getTime()}" 
                 alt="Avatar">
             <section class="friend-card__info">
                 <h3 class="friend-card__name">${user.username}</h3>

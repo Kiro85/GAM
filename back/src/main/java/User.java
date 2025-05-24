@@ -61,8 +61,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 			error = true;
@@ -127,8 +128,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 			error = true;
@@ -175,8 +177,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -220,8 +223,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -264,8 +268,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -311,8 +316,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException error) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + error.getMessage());
 		}
@@ -359,8 +365,9 @@ public class User {
 
 			// Conectamos con la base de datos
 			Connection conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 
 			// Creamos la statement
 			Statement mStm = conBD.createStatement();
@@ -396,8 +403,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -450,8 +458,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 			return "[]";
@@ -515,8 +524,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 		}
@@ -560,8 +570,9 @@ public class User {
 		Connection conBD = null;
 		try {
 			conBD = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/gam",
-					"root", "");
+					DatabaseConfig.DB_URL,
+					DatabaseConfig.DB_USER,
+					DatabaseConfig.DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Error al conectar con el servidor MySQL/MariaDB: " + e.getMessage());
 			throw new RuntimeException("Error al conectar con la base de datos");

@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 function removeContent(externalId, contentType) {
     try {
         var http = new XMLHttpRequest();
@@ -9,7 +11,7 @@ function removeContent(externalId, contentType) {
             }
         };
 
-        http.open("POST", "http://localhost:8080/GAM/RemoveContent", true);
+        http.open("POST", `${Backend}/RemoveContent`, true);
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         http.send("userToken=" + localStorage.getItem('authToken') + "&externalId=" + externalId + "&contentType=" + contentType);
 

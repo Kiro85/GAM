@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 function getCommentsFromDB(contentId) {
     try {
         var http = new XMLHttpRequest();
@@ -8,7 +10,7 @@ function getCommentsFromDB(contentId) {
             }
         };
 
-        http.open("GET", "http://localhost:8080/GAM/GetComments?contentId=" + contentId, true);
+        http.open("GET", `${Backend}/GetComments?contentId=` + contentId, true);
         http.send();
 
     } catch (error) {

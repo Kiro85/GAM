@@ -1,3 +1,5 @@
+import { Backend } from '../../config.js';
+
 async function updateProfileImage(userToken, imageType, imageFile) {
     return new Promise((resolve, reject) => {
         const http = new XMLHttpRequest();
@@ -17,13 +19,13 @@ async function updateProfileImage(userToken, imageType, imageFile) {
             }
         };
 
-        http.open('POST', 'http://localhost:8080/GAM/UpdateProfileImage', true);
+        http.open('POST', `${Backend}/UpdateProfileImage`, true);
         http.send(formData);
     });
 }
 
 function getProfileImageUrl(userToken, imageType) {
-    return `http://localhost:8080/GAM/GetProfileImage?userToken=${userToken}&imageType=${imageType}_image&t=${new Date().getTime()}`;
+    return `${Backend}/GetProfileImage?userToken=${userToken}&imageType=${imageType}_image&t=${new Date().getTime()}`;
 }
 
 // Función para cargar las imágenes
