@@ -49,7 +49,7 @@ function register() {
             }
         };
 
-        http.open("POST", `${API_URL}/Register`, true);
+        http.open("POST", `${Backend}/Register`, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         http.send("username=" + username + "&password=" + password + "&repeatPassword=" + repeatPassword);
 
