@@ -6,7 +6,6 @@
 - Desarrollar una aplicación web con interacción entre el backend, una base de datos y el frontend
 
 ### 1.2 Funcionalidades Principales
-- Frontend desarrollado con tecnologías web modernas
 - Gestión de usuarios y autenticación
 - Gestión de contenido por usuario (contenido guardado, puntuación añadida, comentarios por contenido...)
 - Interfaz de usuario interactiva
@@ -35,7 +34,7 @@
 └── back/              # Backend (Java)
 |   └── src/            # Código fuente del servidor
 |
-|── media              # Imagenes para el README.md
+|── media              # Imagenes para el README.md y script de la base de datos
 ```
 
 ## 4. Guía de Instalación y Uso
@@ -44,6 +43,9 @@
 - Node.js (v14 o superior)
 - Java JDK (v11 o superior)
 - Git
+- XAPP
+- Eclipse
+- Tomcat Ver-10.0.27
 
 ### 4.2 Instalación
 
@@ -55,13 +57,13 @@ npm run dev
 ```
 
 #### Backend
-1. Añadir el proyecto de java al servidor Tomcat (Tomcat V. 10.0.27)
-2. Ejecutar el servidor Tomcat
-3. Iniciar el servidor de Apache y MySQL en XAPP
-4. Añadir la base de datos en tu servidor MySQL
+1. Importar en eclipse el pryecto. Recomendable importar únicamente la carpeta GAM/back
+2. Añadir el proyecto de java al servidor Tomcat (Tomcat V. 10.0.27)
+3. Ejecutar el servidor Tomcat
 
 #### Base de datos
-1. para crear la base de datos se puede usar el script situado en GAM/media/BD-Script.sql
+1. Iniciar el servidor de Apache y MySQL en XAPP
+2. Añadir la base de datos en tu servidor MySQL, para añadirla se puede usar el script situado en GAM/media/BD-Script.sql
 
 ### 4.3 Configuración
 1. Configurar las variables de entorno necesarias
@@ -93,11 +95,9 @@ Este usuario es un usuario de pruebas, el cual ya tiene añadido contenido y ami
 ## 5. Tecnologías Utilizadas
 
 ### Frontend
-- React
+- Vite
 - HTML5/CSS3
 - JavaScript
 
 ### Backend
-- Java
-- Spring Boot
-- REST API
+- Java 22.0
